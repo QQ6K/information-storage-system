@@ -13,10 +13,11 @@ import javax.persistence.Id;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
+public class ItemSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String name;
-    Double price;
+    Item item;
+    int count;
+    Discount discount;
 }
