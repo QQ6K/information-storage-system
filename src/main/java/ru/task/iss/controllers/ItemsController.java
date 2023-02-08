@@ -7,9 +7,9 @@ import ru.task.iss.services.dtos.ItemDto;
 import ru.task.iss.services.dtos.ItemUpdateDto;
 
 @RestController
-@RequestMapping(path = "/item")
+@RequestMapping(path = "/items")
 @RequiredArgsConstructor
-public class ItemController {
+public class ItemsController {
 
     private final ItemService itemService;
 

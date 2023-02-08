@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 @EnableScheduling
 @Transactional(readOnly = true)
-public class ItemServiceImpl implements ItemService {
+public class ItemsServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
 
@@ -53,6 +53,5 @@ public class ItemServiceImpl implements ItemService {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new CrudException("Cannot find Item with id = " + itemId));
     }
-
 
 }
