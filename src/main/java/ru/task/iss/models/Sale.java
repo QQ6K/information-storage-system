@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,6 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Sale {
-    LocalDateTime saleDatetime;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    LocalDateTime created_on;
+    //@OneToMany
     List<ItemSale> shoppingList;
 }

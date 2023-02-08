@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -19,5 +17,6 @@ public class ItemSale {
     Long id;
     Item item;
     int count;
+   // @OneToOne
     Discount discount;
 }
