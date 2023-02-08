@@ -11,12 +11,16 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class ItemSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @ManyToOne
     Item item;
+    @ManyToOne
+    Sale sale;
     int count;
-   // @OneToOne
+    @OneToOne
     Discount discount;
 }

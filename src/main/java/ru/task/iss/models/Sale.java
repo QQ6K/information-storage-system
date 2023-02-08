@@ -13,11 +13,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     LocalDateTime created_on;
-    //@OneToMany
+    @OneToMany
+    @JoinTable(name = "itemSales",joinColumns = @JoinColumn(name = "id"))
     List<ItemSale> shoppingList;
 }
