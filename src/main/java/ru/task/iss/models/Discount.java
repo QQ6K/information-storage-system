@@ -3,6 +3,7 @@ package ru.task.iss.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -15,9 +16,11 @@ public class Discount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    int val;
+    private Long id;
+    private int val;
     @ManyToOne
-    Item item;
+    private Item item;
+    private LocalDateTime start;
+    private LocalDateTime end;
 
 }
