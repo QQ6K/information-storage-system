@@ -16,4 +16,7 @@ public interface SalesRepository extends JpaRepository<Sale,Long> {
     public LocalDateTime findFirstByCreatedOnOrderByCreatedOnDesc();
 
     public LocalDateTime findFirstByCreatedOnOrderByCreatedOnAsc();
+    @Query("SELECT sum(s.item.price) FROM SaleItem s where s.sale.createdOn between :start and :end")
+    public LocalDateTime getFullSum(LocalDateTime start, LocalDateTime end);
+
 }
