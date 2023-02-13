@@ -28,7 +28,7 @@ public class DiscountSchedulerService {
     private static final String cron = "0 0 * * * *";
 
     @Scheduled(cron = cron)
-    private void scheduleDiscount() {
+    public void scheduleDiscount() {
         Discount discount = new Discount();
         discount.setVal(ThreadLocalRandom.current().nextInt(minRandomDiscount,maxRandomDiscount+1));
         discount.setItem(getRandomItem());

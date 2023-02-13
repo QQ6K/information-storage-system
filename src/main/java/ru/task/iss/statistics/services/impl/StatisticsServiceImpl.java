@@ -22,18 +22,18 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final StatisticsMemoryRepository statisticsMemoryRepository;
 
-    public LocalDateTime getEarlyTimeSale(){
+    /*public LocalDateTime getEarlyTimeSale(){
         return salesRepository.findFirstByCreatedOnOrderByCreatedOnDesc();
-    }
+    }*/
 
-    public LocalDateTime getLateDateTime(){
+    /*public LocalDateTime getLateDateTime(){
         return salesRepository.findFirstByCreatedOnOrderByCreatedOnAsc();
-    }
+    }*/
 
     public Long getCashReceiptCountHour(){
         return salesRepository.getCashReceiptFromHourCount(
-                discountSchedulerService.getPastDiscount().getStart(),
-                discountSchedulerService.getPastDiscount().getEnd());
+                discountSchedulerService.getPastDiscount().getStarting(),
+                discountSchedulerService.getPastDiscount().getEnding());
     }
 
     public StatisticData calculateStatistics(){

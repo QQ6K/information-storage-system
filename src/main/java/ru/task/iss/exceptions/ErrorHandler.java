@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -18,6 +19,8 @@ public class ErrorHandler {
     @ExceptionHandler({CrudException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> notAvailableException(CrudException e) {
-        return Map.of("Ошибка:", e.getMessage());
+        HashMap hashMap = new HashMap();
+        hashMap.put("Ошибка:", e.getMessage());
+        return hashMap;
 }
 }

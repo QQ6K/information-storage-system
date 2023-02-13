@@ -1,7 +1,6 @@
 package ru.task.iss.items.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.exceptions.CrudException;
@@ -12,7 +11,9 @@ import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemUpdateDto;
 import ru.task.iss.items.services.dtos.ItemMapper;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +31,11 @@ public class ItemsServiceImpl implements ItemService {
     @Override
     public ItemDto readItem(Long itemId){
         return ItemMapper.toDto(findItemInRepository(itemId));
+    }
+
+    @Override
+    public List<ItemUpdateDto> getItems(){
+        return itemsRepository.findAll().stream().map(ItemMapper::toUpdateDto).collect(Collectors.toList());
     }
 
     @Override

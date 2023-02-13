@@ -16,9 +16,9 @@ public class SaleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Item item;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private  Sale sale;
     private int count;
     @OneToOne

@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface SalesRepository extends JpaRepository<Sale,Long> {
-    @Query("select distinct s from Sale s where s.createdOn >= :start and s.createdOn <= :end")
+    @Query("select distinct s from Sale s where s.createdOn >= :starting and s.createdOn <= :ending")
     //можно через id скидки, но не очень нравится идея
-    public Long getCashReceiptFromHourCount(LocalDateTime start, LocalDateTime end);
+    public Long getCashReceiptFromHourCount(LocalDateTime starting, LocalDateTime ending);
 
-    public LocalDateTime findFirstByCreatedOnOrderByCreatedOnDesc();
+    //public LocalDateTime findFirstByCreatedOnOrderByCreatedOnDesc();
 
-    public LocalDateTime findFirstByCreatedOnOrderByCreatedOnAsc();
-    @Query("SELECT sum(s.item.price) FROM SaleItem s where s.sale.createdOn between :start and :end")
-    public LocalDateTime getFullSum(LocalDateTime start, LocalDateTime end);
+   // public LocalDateTime findFirstByCreatedOnOrderByCreatedOnAsc();
+    @Query("SELECT sum(s.item.price) FROM SaleItem s where s.sale.createdOn between :starting and :ending")
+    public LocalDateTime getFullSum(LocalDateTime starting, LocalDateTime ending);
 
 }

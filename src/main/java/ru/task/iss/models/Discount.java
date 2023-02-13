@@ -18,9 +18,9 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int val;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Item item;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime starting;
+    private LocalDateTime ending;
 
 }

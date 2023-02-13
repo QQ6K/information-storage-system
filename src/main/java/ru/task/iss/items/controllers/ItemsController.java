@@ -6,6 +6,8 @@ import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemUpdateDto;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/items")
 @RequiredArgsConstructor
@@ -25,6 +27,12 @@ public class ItemsController {
             @PathVariable Long itemId
     ) {
         return itemService.readItem(itemId);
+    }
+
+    @GetMapping
+    public List<ItemUpdateDto> getItems(
+    ) {
+        return itemService.getItems();
     }
 
     @PatchMapping("/{itemId}")
