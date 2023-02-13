@@ -1,6 +1,7 @@
 package ru.task.iss.items.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.exceptions.CrudException;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class ItemsServiceImpl implements ItemService {
 
     private final ItemsRepository itemsRepository;
@@ -35,6 +37,7 @@ public class ItemsServiceImpl implements ItemService {
 
     @Override
     public List<ItemUpdateDto> getItems(){
+        log.info("Получить список товаров");
         return itemsRepository.findAll().stream().map(ItemMapper::toUpdateDto).collect(Collectors.toList());
     }
 

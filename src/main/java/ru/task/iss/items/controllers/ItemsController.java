@@ -1,6 +1,7 @@
 package ru.task.iss.items.controllers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/items")
 @RequiredArgsConstructor
+@Slf4j
 public class ItemsController {
 
     private final ItemService itemService;
@@ -32,6 +34,7 @@ public class ItemsController {
     @GetMapping
     public List<ItemUpdateDto> getItems(
     ) {
+        log.info("Получен GET запрос /items");
         return itemService.getItems();
     }
 
