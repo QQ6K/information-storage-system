@@ -2,9 +2,10 @@ package ru.task.iss.sales.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.task.iss.models.Basket;
+import ru.task.iss.models.Order;
 import ru.task.iss.sales.services.SalesService;
-import ru.task.iss.sales.services.dtos.SaleDto;
-import ru.task.iss.sales.services.dtos.SaleUpdateDto;
+import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 
 @RestController
 @RequestMapping(path = "/sales")
@@ -13,7 +14,29 @@ public class SalesController {
 
     private final SalesService salesService;
 
+    @PostMapping("/add")
+    public Basket addItemToBucket(
+            @RequestBody UpdateBucketShortDto updateBucketShortDto
+    ) {
+        return salesService.addItemToBucket(updateBucketShortDto);
+    }
+
+    @DeleteMapping("/delete/{bucketItemId}")
+    public void deleteItem(
+            @PathVariable Long bucketItemId
+    ) {
+        salesService.deleteBucketItem(bucketItemId);
+    }
+
     @PostMapping
+    public Order buyBasket () {
+        return salesService.buyBasket();
+    }
+
+
+
+
+   /* @PostMapping
     public SaleDto createItem(
             @RequestBody SaleDto saleDto
     ) {
@@ -40,5 +63,5 @@ public class SalesController {
             @PathVariable Long saleId
     ) {
         salesService.deleteSale(saleId);
-    }
+    }*/
 }

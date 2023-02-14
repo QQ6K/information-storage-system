@@ -1,20 +1,21 @@
 package ru.task.iss.sales.services.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.task.iss.discounts.scheduler.DiscountSchedulerService;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
-import ru.task.iss.models.Sale;
-import ru.task.iss.models.SaleItem;
-import ru.task.iss.sales.repositories.SaleItemsRepository;
-import ru.task.iss.sales.repositories.SalesRepository;
+import ru.task.iss.models.*;
+import ru.task.iss.sales.repositories.BasketItemsRepository;
+import ru.task.iss.sales.repositories.BasketRepository;
+import ru.task.iss.sales.repositories.OrderItemRepository;
+import ru.task.iss.sales.repositories.OrderRepository;
 import ru.task.iss.sales.services.SalesService;
-import ru.task.iss.sales.services.dtos.*;
+import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
 @Service
@@ -22,16 +23,90 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class SalesServiceImpl implements SalesService {
 
-    private final SalesRepository salesRepository;
+    public static final Long userId = 1L;
+    private final BasketRepository basketRepository;
 
-    private final SaleItemsRepository saleItemsRepository;
+    private final BasketItemsRepository basketItemsRepository;
 
     private final ItemsRepository itemsRepository;
 
+    public final OrderRepository orderRepository;
+
+    private final OrderItemRepository orderItemRepository;
+
+
+    private final DiscountSchedulerService discountSchedulerService;
+
+    @PostConstruct
+    private Basket createBucketForUser() {
+        Basket basket = new Basket();
+        return basketRepository.save(basket);
+    }
+
+    @Override
+    @Transactional
+    public Basket addItemToBucket(UpdateBucketShortDto updateBucketShortDto) {
+        Basket basket = basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
+        BasketItem basketItem = basketItemsRepository.findBucketItemByItemId(updateBucketShortDto.getId());
+        if (basketItem.equals(null)) {
+            basketItem = new BasketItem();
+        }
+        if (updateBucketShortDto.getCount() == 0) {
+            deleteBucketItemFromBucket(updateBucketShortDto.getId());
+        } else {
+            basketItem.setBasket(basket);
+            basketItem.setItem(itemsRepository.getById(updateBucketShortDto.getId()));
+            basketItem.setCount(updateBucketShortDto.getCount());
+            basketItemsRepository.save(basketItem);
+        }
+        return basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
+    }
+
     //@Override
     @Transactional
+    @Override
+    public void deleteBucketItem(Long itemId) {
+        deleteBucketItemFromBucket(itemId);
+    }
+
+    public void deleteBucketItemFromBucket(Long itemId) {
+        basketItemsRepository.delete(findBucketItemInRepository(itemId));
+    }
+
+    public BasketItem findBucketItemInRepository(Long bucketItemId) {
+        return basketItemsRepository.findBucketItemByItemId(bucketItemId);
+    }
+
+    @Transactional
+    @Override
+    public Order buyBasket() {
+        Basket basket = basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
+        Order order = orderRepository.save(new Order());
+        for (BasketItem bucketitem : basket.getBasketItems()) {
+            order.getOrderItems().add(saveBasketItem(bucketitem, order));
+        }
+        return orderRepository.save(order);
+    }
+
+    private OrderItem saveBasketItem(BasketItem basketItem, Order order) {
+        Discount discount = discountSchedulerService.getCurrentDiscount();
+        OrderItem orderItem = orderItemRepository.save(new OrderItem());
+        orderItem.setOrder(order);
+        orderItem.setItem(basketItem.getItem());
+        orderItem.setCount(basketItem.getCount());
+        if (discount.getItem() == basketItem.getItem()) {
+            double price = Math.round(
+                    discount.getValCoefficient() * basketItem.getItem().getPrice() * basketItem.getCount());
+            orderItem.setFixedItemPrice(price);
+        } else orderItem.setFixedItemPrice(basketItem.getItem().getPrice() * basketItem.getCount());
+        return orderItem;
+    }
+
+
+    //@Override
+   /* @Transactional
     public SaleItemDto createSaleItem(SaleItemDto saleItemDto){
-        return SaleItemMapper.toDto(saleItemsRepository.save(SaleItemMapper.fromDto(saleItemDto)));
+        return SaleItemMapper.toDto(bucketItemsRepository.save(SaleItemMapper.fromDto(saleItemDto)));
     }
 
     //@Override
@@ -42,23 +117,23 @@ public class SalesServiceImpl implements SalesService {
    //@Override
     @Transactional
     public SaleItemUpdateDto updateSaleItem(Long saleItemId, SaleItemDto saleItemDto){
-        SaleItem saleItem = findSaleItemInRepository(saleItemId);
-        Optional.ofNullable(saleItemDto.getItem()).ifPresent(saleItem::setItem);
-        Optional.ofNullable(saleItemDto.getSale()).ifPresent(saleItem::setSale);
-        Optional.ofNullable(saleItemDto.getCount()).ifPresent(saleItem::setCount);
-        Optional.ofNullable(saleItemDto.getDiscount()).ifPresent(saleItem::setDiscount);
-        return SaleItemMapper.toUpdateDto(saleItemsRepository.save(SaleItemMapper.fromDto(saleItemDto)));
+        BucketItem bucketItem = findSaleItemInRepository(saleItemId);
+        Optional.ofNullable(saleItemDto.getItem()).ifPresent(bucketItem::setItem);
+        Optional.ofNullable(saleItemDto.getBucket()).ifPresent(bucketItem::setBucket);
+        Optional.ofNullable(saleItemDto.getCount()).ifPresent(bucketItem::setCount);
+        Optional.ofNullable(saleItemDto.getDiscount()).ifPresent(bucketItem::setDiscount);
+        return SaleItemMapper.toUpdateDto(bucketItemsRepository.save(SaleItemMapper.fromDto(saleItemDto)));
     }
 
     //@Override
     @Transactional
     public void deleteSaleItem(Long saleItemId){
-        saleItemsRepository.delete(findSaleItemInRepository(saleItemId));
+        bucketItemsRepository.delete(findSaleItemInRepository(saleItemId));
     }
 
     //@Override
-    public SaleItem findSaleItemInRepository(Long saleId){
-        return saleItemsRepository.findById(saleId)
+    public BucketItem findSaleItemInRepository(Long saleId){
+        return bucketItemsRepository.findById(saleId)
                 .orElseThrow(()->new CrudException("Cannot SaleItem with id = " + saleId));
     }
 
@@ -66,7 +141,7 @@ public class SalesServiceImpl implements SalesService {
     @Override
     @Transactional
     public SaleDto createSale(SaleDto saleDto){
-        return SaleMapper.toDto(salesRepository.save(SaleMapper.fromDto(saleDto)));
+        return SaleMapper.toDto(bucketRepository.save(SaleMapper.fromDto(saleDto)));
     }
 
     @Override
@@ -77,22 +152,22 @@ public class SalesServiceImpl implements SalesService {
     @Override
     @Transactional
     public SaleUpdateDto updateSale(Long saleId, SaleDto saleDto){
-        Sale sale = findSaleInRepository(saleId);
-        Optional.ofNullable(saleDto.getCreatedOn()).ifPresent(sale::setCreatedOn);
-        Optional.ofNullable(saleDto.getShoppingList()).ifPresent(sale::setShoppingList);
-        return SaleMapper.toUpdateDto(salesRepository.save(SaleMapper.fromDto(saleDto)));
+        Bucket bucket = findSaleInRepository(saleId);
+        Optional.ofNullable(saleDto.getCreatedOn()).ifPresent(bucket::setCreatedOn);
+        Optional.ofNullable(saleDto.getShoppingList()).ifPresent(bucket::setShoppingList);
+        return SaleMapper.toUpdateDto(bucketRepository.save(SaleMapper.fromDto(saleDto)));
     }
 
     @Override
     @Transactional
     public void deleteSale(Long saleId){
-        saleItemsRepository.delete(findSaleItemInRepository(saleId));
+        bucketItemsRepository.delete(findSaleItemInRepository(saleId));
     }
 
     @Override
-    public Sale findSaleInRepository(Long saleId){
-        return salesRepository.findById(saleId)
+    public Bucket findSaleInRepository(Long saleId){
+        return bucketRepository.findById(saleId)
                 .orElseThrow(()->new CrudException("Cannot SaleItem with id = " + saleId));
-    }
+    }*/
 
 }

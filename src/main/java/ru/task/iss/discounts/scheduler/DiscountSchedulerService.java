@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronExpression;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
+import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
-import ru.task.iss.items.repositories.ItemsRepository;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
@@ -35,17 +34,18 @@ public class DiscountSchedulerService {
     @Scheduled(cron = cron)
     public void scheduleDiscount() {
         Discount discount = new Discount();
-        discount.setVal(ThreadLocalRandom.current().nextInt(minRandomDiscount,maxRandomDiscount+1));
+        discount.setValCoefficient(
+                100.00 - ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1) / 100.00);
         discount.setItem(getRandomItem());
         discount.setStarting(LocalDateTime.now());
         discount.setEnding(discount.getStarting().plusMinutes(1));
         discount = discountRepository.save(discount);
         log.info("Шайтан машина делает скидку id = {}, для {}, размером {}%, будет длиться с {} до {}",
-                discount.getId(),discount.getItem().getName(),discount.getVal(), discount.getStarting(),
+                discount.getId(), discount.getItem().getName(), discount.getValCoefficient(), discount.getStarting(),
                 discount.getEnding());
     }
 
-    private Item getRandomItem(){
+    private Item getRandomItem() {
         Long n = itemsRepository.count();
         log.info("Репозиторий товаров id = {}", n);
         Long i = ThreadLocalRandom.current()
@@ -56,11 +56,11 @@ public class DiscountSchedulerService {
                 .orElseThrow(() -> new CrudException("Cannot find random Item element"));
     }
 
-    public Discount getCurrentDiscount(){
+    public Discount getCurrentDiscount() {
         return discountRepository.findFirstByOrderByIdDesc();
     }
 
-    public Discount getPastDiscount(){
+    public Discount getPastDiscount() {
         return discountRepository.findPastDiscount();
     }
 
