@@ -22,25 +22,27 @@ import java.util.concurrent.ThreadLocalRandom;
 @Slf4j
 public class DiscountSchedulerService {
 
-    int minRandomDiscount = 5;
-    int maxRandomDiscount = 10;
+    private static final int minRandomDiscount = 5;
+    private static final int maxRandomDiscount = 10;
 
     private final DiscountRepository discountRepository;
     private final ItemsRepository itemsRepository;
-
-    private static final String cron = "0 * * * * *";
+    // private static final String cron = "0 * * * * *";
     //private static final String cron = "0 0 * * * *";
 
-    @Scheduled(cron = cron)
+    //@Scheduled(cron = cron)
+    @Scheduled(fixedDelay = 1000)
     public void scheduleDiscount() {
         Discount discount = new Discount();
         discount.setValCoefficient(
-                100.00 - ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1) / 100.00);
+                (100.00 - ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
+                        / 100.00);
         discount.setItem(getRandomItem());
         discount.setStarting(LocalDateTime.now());
         discount.setEnding(discount.getStarting().plusMinutes(1));
         discount = discountRepository.save(discount);
-        log.info("Шайтан машина делает скидку id = {}, для {}, размером {}%, будет длиться с {} до {}",
+        log.info("Шайтан машина делает скидку id = {}, для {}, коээфициент для цены будет {}," +
+                        " будет длиться с {} до {}",
                 discount.getId(), discount.getItem().getName(), discount.getValCoefficient(), discount.getStarting(),
                 discount.getEnding());
     }
@@ -49,7 +51,7 @@ public class DiscountSchedulerService {
         Long n = itemsRepository.count();
         log.info("Репозиторий товаров id = {}", n);
         Long i = ThreadLocalRandom.current()
-                .nextLong(itemsRepository.count());
+                .nextLong(itemsRepository.count()) + 1;
         log.info("Слушайный товар id = {}", i);
         return itemsRepository.findById(i
                 )
