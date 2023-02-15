@@ -11,6 +11,8 @@ import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
+import ru.task.iss.sales.services.SalesService;
+import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,11 +29,12 @@ public class DiscountSchedulerService {
 
     private final DiscountRepository discountRepository;
     private final ItemsRepository itemsRepository;
+
     // private static final String cron = "0 * * * * *";
     //private static final String cron = "0 0 * * * *";
 
     //@Scheduled(cron = cron)
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 10000)
     public void scheduleDiscount() {
         Discount discount = new Discount();
         discount.setValCoefficient(

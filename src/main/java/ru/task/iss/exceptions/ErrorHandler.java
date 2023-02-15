@@ -19,8 +19,8 @@ public class ErrorHandler {
     @ExceptionHandler({CrudException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> notAvailableException(CrudException e) {
-        HashMap hashMap = new HashMap();
-        hashMap.put("Ошибка:", e.getMessage());
-        return hashMap;
+        Map map = new HashMap();
+        map.put("Ошибка:", e.getMessage());
+        return map;
 }
 }

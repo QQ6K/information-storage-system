@@ -1,7 +1,9 @@
 package ru.task.iss.sales.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.discounts.scheduler.DiscountSchedulerService;
@@ -16,11 +18,13 @@ import ru.task.iss.sales.services.SalesService;
 import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 
 import javax.annotation.PostConstruct;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 @Service
 @EnableScheduling
 @Transactional(readOnly = true)
+@Slf4j
 public class SalesServiceImpl implements SalesService {
 
     public static final Long userId = 1L;
@@ -47,18 +51,21 @@ public class SalesServiceImpl implements SalesService {
     @Transactional
     public Basket addItemToBucket(UpdateBucketShortDto updateBucketShortDto) {
         Basket basket = basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
-        BasketItem basketItem = basketItemsRepository.findBucketItemByItemId(updateBucketShortDto.getId());
-        if (basketItem.equals(null)) {
+        BasketItem basketItem = basketItemsRepository.findBasketItemByItemId(updateBucketShortDto.getId());
+        if (basketItem == null) {
             basketItem = new BasketItem();
         }
         if (updateBucketShortDto.getCount() == 0) {
-            deleteBucketItemFromBucket(updateBucketShortDto.getId());
+            if (findBucketItemInRepository(updateBucketShortDto.getId())!=null) {
+            deleteBucketItemFromBucket(updateBucketShortDto.getId());}
+            else throw new CrudException("Удалять нечего");
         } else {
             basketItem.setBasket(basket);
             basketItem.setItem(itemsRepository.getById(updateBucketShortDto.getId()));
             basketItem.setCount(updateBucketShortDto.getCount());
             basketItemsRepository.save(basketItem);
         }
+        basket.setBasketItems(basketItemsRepository.findAllByBasket(basket));
         return basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
     }
 
@@ -74,7 +81,7 @@ public class SalesServiceImpl implements SalesService {
     }
 
     public BasketItem findBucketItemInRepository(Long bucketItemId) {
-        return basketItemsRepository.findBucketItemByItemId(bucketItemId);
+        return basketItemsRepository.findBasketItemByItemId(bucketItemId);
     }
 
     @Transactional
@@ -82,9 +89,11 @@ public class SalesServiceImpl implements SalesService {
     public Order buyBasket() {
         Basket basket = basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
         Order order = orderRepository.save(new Order());
+        basket.setBasketItems(basketItemsRepository.findAllByBasket(basket));
         for (BasketItem bucketitem : basket.getBasketItems()) {
             order.getOrderItems().add(saveBasketItem(bucketitem, order));
         }
+        log.info("Геннадий закупает всю корзину! На сумму {}", order.getTotalAmount());
         return orderRepository.save(order);
     }
 
@@ -99,7 +108,33 @@ public class SalesServiceImpl implements SalesService {
                     discount.getValCoefficient() * basketItem.getItem().getPrice() * basketItem.getCount());
             orderItem.setFixedItemPrice(price);
         } else orderItem.setFixedItemPrice(basketItem.getItem().getPrice() * basketItem.getCount());
-        return orderItem;
+        return orderItemRepository.save(orderItem);
+    }
+
+    @Scheduled(fixedDelay = 777)
+    public void scheduleAddItemTest() {
+        UpdateBucketShortDto updateBucketShortDto = new UpdateBucketShortDto();
+        updateBucketShortDto.setCount(ThreadLocalRandom.current().nextInt(10));
+        updateBucketShortDto.setId(getRandomItem().getId());
+        log.info("Товар id = {} в корзину! Целых {} штук",
+                updateBucketShortDto.getId(),updateBucketShortDto.getCount());
+        addItemToBucket(updateBucketShortDto);
+    }
+
+    @Scheduled(fixedDelay = 5000)
+    public void scheduleBuyBasketTest() {
+        buyBasket();
+    }
+
+    private Item getRandomItem() {
+        Long n = itemsRepository.count();
+        log.info("Репозиторий товаров id = {}", n);
+        Long i = ThreadLocalRandom.current()
+                .nextLong(itemsRepository.count()) + 1;
+        log.info("Слушайный товар id = {}", i);
+        return itemsRepository.findById(i
+                )
+                .orElseThrow(() -> new CrudException("Cannot find random Item element"));
     }
 
 
