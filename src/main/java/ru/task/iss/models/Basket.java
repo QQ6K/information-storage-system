@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
-/*
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,4 +20,4 @@ public class Basket {
     @OneToMany
     @JoinTable(name = "basketItems",joinColumns = @JoinColumn(name = "id"))
     private List<BasketItem> basketItems;
-}*/
+}

@@ -1,5 +1,5 @@
 package ru.task.iss.models;
-/*
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +21,4 @@ public class OrderItem {
     private int count;
     @ManyToOne(cascade = CascadeType.MERGE)
     private Order order;
-}*/
+}

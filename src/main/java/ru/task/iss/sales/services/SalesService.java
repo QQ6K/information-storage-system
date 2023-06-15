@@ -1,12 +1,12 @@
 package ru.task.iss.sales.services;
-/*
+
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.models.Basket;
 import ru.task.iss.models.Order;
 import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 
 public interface SalesService {
-    @Transactional
+  /*  @Transactional
     Basket addItemToBucket(UpdateBucketShortDto updateBucketShortDto);
 
     //@Override
@@ -26,5 +26,5 @@ public interface SalesService {
     @Transactional
     void deleteSale(Long saleId);
 
-    Bucket findSaleInRepository(Long saleId);
-}*/
+    Bucket findSaleInRepository(Long saleId);*/
+}

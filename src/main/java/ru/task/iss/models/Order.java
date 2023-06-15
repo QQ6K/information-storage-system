@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-/*
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,4 +24,4 @@ public class Order {
     @JoinTable(name = "orderItems",joinColumns = @JoinColumn(name = "id"))
     private List<OrderItem> orderItems;
     private double totalAmount;
-}*/
+}

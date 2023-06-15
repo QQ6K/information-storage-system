@@ -69,7 +69,6 @@ public class SalesServiceImpl implements SalesService {
         return basketRepository.findById(userId).orElseThrow(() -> new CrudException("This is impossible!"));
     }
 
-    //@Override
     @Transactional
     @Override
     public void deleteBucketItem(Long itemId) {
@@ -138,8 +137,8 @@ public class SalesServiceImpl implements SalesService {
     }
 
 
-    //@Override
-   /* @Transactional
+    /*@Override
+   @Transactional
     public SaleItemDto createSaleItem(SaleItemDto saleItemDto){
         return SaleItemMapper.toDto(bucketItemsRepository.save(SaleItemMapper.fromDto(saleItemDto)));
     }
@@ -205,5 +204,4 @@ public class SalesServiceImpl implements SalesService {
                 .orElseThrow(()->new CrudException("Cannot SaleItem with id = " + saleId));
     }
 
-}
-*/
+}*/

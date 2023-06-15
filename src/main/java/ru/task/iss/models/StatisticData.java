@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-/*
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,4 +24,4 @@ public class StatisticData {
     private Double avgWithDiscount; //стоимость среднего чека с учетом скидок
     private Double increase; // прирост среднего чека к предыдущему часу
 
-}*/
+}
