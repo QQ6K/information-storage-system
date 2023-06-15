@@ -1,5 +1,5 @@
 package ru.task.iss.sales.controllers;
-
+/*
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.models.Basket;
@@ -63,5 +63,6 @@ public class SalesController {
             @PathVariable Long saleId
     ) {
         salesService.deleteSale(saleId);
-    }*/
+    }
 }
+*/

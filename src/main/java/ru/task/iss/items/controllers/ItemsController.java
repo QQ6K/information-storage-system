@@ -21,6 +21,7 @@ public class ItemsController {
     public ItemUpdateDto createItem(
             @RequestBody ItemDto itemDto
     ) {
+        log.info("Запрос POST на создание товара /items");
         return itemService.createItem(itemDto);
     }
 

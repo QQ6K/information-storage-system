@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
+/*
 @Getter
 @Setter //TODO: change to Builder
 @NoArgsConstructor
@@ -23,4 +23,4 @@ public class Discount {
     private LocalDateTime starting;
     private LocalDateTime ending;
 
-}
+}*/

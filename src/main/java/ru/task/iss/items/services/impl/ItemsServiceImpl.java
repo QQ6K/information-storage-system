@@ -27,6 +27,7 @@ public class ItemsServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemUpdateDto createItem(ItemDto itemDto){
+        log.info("Создание товара");
         return ItemMapper.toUpdateDto(itemsRepository.save(ItemMapper.fromDto(itemDto)));
     }
 

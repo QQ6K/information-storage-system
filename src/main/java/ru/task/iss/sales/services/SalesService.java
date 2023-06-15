@@ -1,5 +1,5 @@
 package ru.task.iss.sales.services;
-
+/*
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.models.Basket;
 import ru.task.iss.models.Order;
@@ -15,7 +15,7 @@ public interface SalesService {
 
     @Transactional
     Order buyBasket();
-    /*@Transactional
+    @Transactional
     SaleDto createSale(SaleDto saleDto);
 
     SaleDto readSale(Long saleId);
@@ -26,5 +26,5 @@ public interface SalesService {
     @Transactional
     void deleteSale(Long saleId);
 
-    Bucket findSaleInRepository(Long saleId);*/
-}
+    Bucket findSaleInRepository(Long saleId);
+}*/

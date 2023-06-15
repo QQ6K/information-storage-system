@@ -1,5 +1,5 @@
 package ru.task.iss.statistics.services.impl;
-
+/*
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         return bucketRepository.getCashReceiptFromHourCount(
                 discountSchedulerService.getPastDiscount().getStarting(),
                 discountSchedulerService.getPastDiscount().getEnding());
-    }*/
+    }
 
     public StatisticData calculateStatistics(){
 
@@ -41,3 +41,4 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 
 }
+*/

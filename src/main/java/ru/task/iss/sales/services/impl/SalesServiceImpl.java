@@ -1,5 +1,5 @@
 package ru.task.iss.sales.services.impl;
-
+/*
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -111,7 +111,7 @@ public class SalesServiceImpl implements SalesService {
         return orderItemRepository.save(orderItem);
     }
 
-    @Scheduled(fixedDelay = 777)
+    //@Scheduled(fixedDelay = 777)
     public void scheduleAddItemTest() {
         UpdateBucketShortDto updateBucketShortDto = new UpdateBucketShortDto();
         updateBucketShortDto.setCount(ThreadLocalRandom.current().nextInt(10));
@@ -121,7 +121,7 @@ public class SalesServiceImpl implements SalesService {
         addItemToBucket(updateBucketShortDto);
     }
 
-    @Scheduled(fixedDelay = 5000)
+    //@Scheduled(fixedDelay = 5000)
     public void scheduleBuyBasketTest() {
         buyBasket();
     }
@@ -203,6 +203,7 @@ public class SalesServiceImpl implements SalesService {
     public Bucket findSaleInRepository(Long saleId){
         return bucketRepository.findById(saleId)
                 .orElseThrow(()->new CrudException("Cannot SaleItem with id = " + saleId));
-    }*/
+    }
 
 }
+*/
