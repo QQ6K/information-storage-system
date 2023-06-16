@@ -34,7 +34,7 @@ public class DiscountSchedulerService {
     //private static final String cron = "0 0 * * * *";
 
     //@Scheduled(cron = cron)
-    @Scheduled(fixedDelay = 10000)
+   // @Scheduled(fixedDelay = 10000)
     public void scheduleDiscount() {
         Discount discount = new Discount();
         discount.setValCoefficient(
