@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+/*
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,3 +22,4 @@ public class BasketItem {
     @ManyToOne(cascade = CascadeType.MERGE)
     private Basket basket;
 }
+*/

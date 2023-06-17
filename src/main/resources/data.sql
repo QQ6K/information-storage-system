@@ -1,10 +1,10 @@
-MERGE INTO ITEMS values(1, 'Дрель кондитерская', 55.20),
-                        (2, 'Морская кладь', 160.15),
-                        (3, 'Быстронаживное дело', 10.00),
-                        (4, 'Итерационный луч', 99.99),
-                        (5, 'Роман Широков', 1234.56),
-                        (6, 'Киндер сюрприз', 200.00),
-                        (7, 'Буква Ю без перекладины (I0)', 300),
-                        (8, 'Гвоздь Маяковского', 1.15),
-                        (9, 'Астон Мартин DB6', 100000.00),
-                        (10, 'Аспирин для котов', 0.25)
+insert INTO ITEMS (id,name, price) values(default,'Дрель кондитерская', 55.20);
+insert INTO ITEMS (id,name, price) values(default,'Морская кладь', 160.15);
+insert INTO ITEMS (id,name, price) values(default,'Быстронаживное дело', 10.00);
+insert INTO ITEMS (id,name, price) values(default,'Итерационный луч', 99.99);
+insert INTO ITEMS (id,name, price) values(default,'Роман Широков', 1234.56);
+insert INTO ITEMS (id,name, price) values(default,'Киндер сюрприз', 200.00);
+insert INTO ITEMS (id,name, price) values(default,'Буква Ю без перекладины (I0)', 300);
+insert INTO ITEMS (id,name, price) values(default,'Гвоздь Маяковского', 1.15);
+insert INTO ITEMS (id,name, price) values(default,'Астон Мартин DB6', 100000.00);
+insert INTO ITEMS (id,name, price) values(default,'Аспирин для котов', 0.25);

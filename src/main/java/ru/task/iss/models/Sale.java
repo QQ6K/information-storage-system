@@ -14,14 +14,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Orders")
-public class Order {
+@Table(name = "Sales")
+public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime createdOn;
     @OneToMany
-    @JoinTable(name = "orderItems",joinColumns = @JoinColumn(name = "id"))
-    private List<OrderItem> orderItems;
+    @JoinTable(name = "salesItems",joinColumns = @JoinColumn(name = "id"))
+    private List<saleItem> saleItems;
     private double totalAmount;
 }

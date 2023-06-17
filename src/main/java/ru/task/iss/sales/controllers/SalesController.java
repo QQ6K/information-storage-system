@@ -1,5 +1,5 @@
 package ru.task.iss.sales.controllers;
-
+/*
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.models.Basket;
@@ -11,7 +11,7 @@ import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 @RequestMapping(path = "/sales")
 @RequiredArgsConstructor
 public class SalesController {
-/*
+
     private final SalesService salesService;
 
     @PostMapping("/add")
@@ -63,5 +63,5 @@ public class SalesController {
             @PathVariable Long saleId
     ) {
         salesService.deleteSale(saleId);
-    }*/
-}
+    }
+}*/

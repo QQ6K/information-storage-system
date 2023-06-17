@@ -30,11 +30,12 @@ public class DiscountSchedulerService {
     private final DiscountRepository discountRepository;
     private final ItemsRepository itemsRepository;
 
-    // private static final String cron = "0 * * * * *";
+    private static final String cron = "0 * * * * *";
     //private static final String cron = "0 0 * * * *";
 
-    //@Scheduled(cron = cron)
-   // @Scheduled(fixedDelay = 10000)
+   // @Scheduled(cron = cron)
+   @Scheduled(fixedDelay = 10000)
+   @Transactional
     public void scheduleDiscount() {
         Discount discount = new Discount();
         discount.setValCoefficient(

@@ -1,5 +1,5 @@
 package ru.task.iss.models;
-
+/*
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,3 +13,4 @@ public class UpdateBasketItem {
     private Long id;
     private Long count;
 }
+*/

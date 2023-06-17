@@ -1,5 +1,5 @@
 package ru.task.iss.models;
-
+/*
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,3 +21,4 @@ public class Basket {
     @JoinTable(name = "basketItems",joinColumns = @JoinColumn(name = "id"))
     private List<BasketItem> basketItems;
 }
+*/

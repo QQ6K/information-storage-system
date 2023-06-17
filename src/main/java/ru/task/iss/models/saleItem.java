@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class OrderItem {
+@Entity@Table(name = "salesItems")
+public class saleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,5 +20,6 @@ public class OrderItem {
     private double fixedItemPrice;
     private int count;
     @ManyToOne(cascade = CascadeType.MERGE)
-    private Order order;
+    private Sale sale;
+    private Long discount;
 }
