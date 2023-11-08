@@ -1,9 +1,9 @@
 drop table if exists items cascade;
-drop table if exists discounts cascade;
+/*drop table if exists discounts cascade;*/
 /*drop table if exists basket cascade;
-drop table if exists basketItems cascade;*/
+drop table if exists basketItems cascade;
 drop table if exists sales cascade;
-drop table if exists salesItems cascade;
+drop table if exists salesItems cascade;*/
 
 /*CREATE SEQUENCE entity_id_seq START 1;*/
 
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS items
     price double precision                        NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS discounts
+/*CREATE TABLE IF NOT EXISTS discounts
 (
     id              BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
     val_coefficient DOUBLE precision                          NOT NULL,

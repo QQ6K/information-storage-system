@@ -2,8 +2,12 @@ package ru.task.iss.items.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.task.iss.common.PageDTO;
+import ru.task.iss.common.PageToPageDTOMapper;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.models.Item;
@@ -24,6 +28,8 @@ public class ItemsServiceImpl implements ItemService {
 
     private final ItemsRepository itemsRepository;
 
+    private final PageToPageDTOMapper<Item> pageToPageDTOMapper;
+
     @Override
     @Transactional
     public ItemUpdateDto createItem(ItemDto itemDto){
@@ -40,6 +46,14 @@ public class ItemsServiceImpl implements ItemService {
     public List<ItemUpdateDto> getItems(){
         log.info("Получить список товаров");
         return itemsRepository.findAll().stream().map(ItemMapper::toUpdateDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public PageDTO<Item> getItemsPage(Pageable pageable){
+        log.info("Получить страницу товаров");
+        Page<Item> itemPage = itemsRepository.findAll(pageable);
+        return pageToPageDTOMapper.pageToPageDTO(itemPage);
+        //findAll().stream().map(ItemMapper::toUpdateDto).collect(Collectors.toList());
     }
 
     @Override

@@ -17,7 +17,7 @@ import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
-@Service
+/*@Service
 @RequiredArgsConstructor
 @EnableScheduling
 @Transactional(readOnly = true)
@@ -76,4 +76,4 @@ public class DiscountSchedulerService {
     }
 
 
-}
+}*/

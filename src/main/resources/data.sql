@@ -8,3 +8,4 @@ insert INTO ITEMS (id,name, price) values(default,'Буква Ю без пере
 insert INTO ITEMS (id,name, price) values(default,'Гвоздь Маяковского', 1.15);
 insert INTO ITEMS (id,name, price) values(default,'Астон Мартин DB6', 100000.00);
 insert INTO ITEMS (id,name, price) values(default,'Аспирин для котов', 0.25);
+insert INTO ITEMS (id,name, price) values(default,'Телеграмма Дмитрию Киселеву', 0.25);

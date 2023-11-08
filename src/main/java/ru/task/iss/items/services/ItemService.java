@@ -1,6 +1,8 @@
 package ru.task.iss.items.services;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import ru.task.iss.common.PageDTO;
 import ru.task.iss.models.Item;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemUpdateDto;
@@ -13,6 +15,8 @@ public interface ItemService {
     ItemDto readItem(Long itemId);
 
     List<ItemUpdateDto> getItems();
+
+    PageDTO<Item> getItemsPage(Pageable pageable);
 
     @Transactional
     ItemUpdateDto updateItem(Long itemId, ItemDto itemDto);

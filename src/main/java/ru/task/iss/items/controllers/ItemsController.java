@@ -2,11 +2,17 @@ package ru.task.iss.items.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import ru.task.iss.common.PageDTO;
+import ru.task.iss.exceptions.BadRequestException;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemUpdateDto;
+import ru.task.iss.models.Item;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -33,10 +39,18 @@ public class ItemsController {
     }
 
     @GetMapping
-    public List<ItemUpdateDto> getItems(
-    ) {
-        log.info("Получен GET запрос /items");
-        return itemService.getItems();
+    public PageDTO<Item> getItems(@RequestParam(defaultValue = "0") Integer from, @RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
+        Pageable pageable;
+        if (size == null || from == null) {
+            pageable = Pageable.unpaged();
+        } else if (size <= 0 || from < 0) {
+            throw new BadRequestException("Ошибка параметров пагинации");
+        } else {
+            int page = from / size;
+            pageable = PageRequest.of(page, size);
+        }
+        log.info("Запрос GET /items?from={}&size={}", from, size);
+        return itemService.getItemsPage(pageable);
     }
 
     @PatchMapping("/{itemId}")
