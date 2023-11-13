@@ -39,17 +39,20 @@ public class ItemsController {
     }
 
     @GetMapping
-    public PageDTO<Item> getItems(@RequestParam(defaultValue = "0") Integer from, @RequestParam(defaultValue = "10") Integer size, HttpServletRequest request) {
+    public PageDTO<Item> getItems(
+            @RequestParam(defaultValue = "0", required = false) Integer from,
+            @RequestParam(defaultValue = "10", required = false) Integer size,
+            @RequestParam(required = false) Integer page, HttpServletRequest request) {
         Pageable pageable;
         if (size == null || from == null) {
             pageable = Pageable.unpaged();
         } else if (size <= 0 || from < 0) {
             throw new BadRequestException("Ошибка параметров пагинации");
         } else {
-            int page = from / size;
+            if (page == null) {page =  from / size;};
             pageable = PageRequest.of(page, size);
         }
-        log.info("Запрос GET /items?from={}&size={}", from, size);
+        log.info("Запрос GET /items?from={}&size={}&page={}", from, size, page);
         return itemService.getItemsPage(pageable);
     }
 

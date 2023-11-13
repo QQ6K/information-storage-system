@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS items
 (
     id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name  VARCHAR(128)                            NOT NULL,
-    price double precision                        NOT NULL
+    price double precision                        NOT NULL,
+    amount BIGINT                                 NOT NULL
 );
 
 /*CREATE TABLE IF NOT EXISTS discounts

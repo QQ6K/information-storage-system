@@ -19,4 +19,5 @@ public class Item {
     Long id;
     String name;
     Double price;
+    Long amount;
 }

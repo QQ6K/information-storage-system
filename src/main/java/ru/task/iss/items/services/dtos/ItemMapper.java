@@ -9,13 +9,14 @@ public class ItemMapper {
     }
 
     public static ItemDto toDto(Item item){
-        return new ItemDto(item.getName(),item.getPrice());
+        return new ItemDto(item.getName(),item.getPrice(), item.getAmount());
     }
 
     public static Item fromDto(ItemDto itemDto){
         Item item =  new Item();
         item.setName(itemDto.getName());
         item.setPrice(itemDto.getPrice());
+        item.setAmount(itemDto.getAmount());
         return item;
     }
 
