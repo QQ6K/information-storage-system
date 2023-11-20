@@ -44,15 +44,15 @@ public class ItemsController {
             @RequestParam(defaultValue = "10", required = false) Integer size,
             @RequestParam(required = false) Integer page, HttpServletRequest request) {
         Pageable pageable;
-        if (size == null || from == null) {
+        if (size == null) {
             pageable = Pageable.unpaged();
-        } else if (size <= 0 || from < 0) {
+        } else if (size <= 0) {
             throw new BadRequestException("Ошибка параметров пагинации");
         } else {
             if (page == null) {page =  from / size;};
             pageable = PageRequest.of(page, size);
         }
-        log.info("Запрос GET /items?from={}&size={}&page={}", from, size, page);
+        log.info("Запрос GET /items?size={}&page={}", size, page);
         return itemService.getItemsPage(pageable);
     }
 
