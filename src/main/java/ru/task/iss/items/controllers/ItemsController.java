@@ -61,6 +61,7 @@ public class ItemsController {
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto
     ) {
+        log.info("Запрос PATCH на изменение товара id = {}", itemId);
         return itemService.updateItem(itemId, itemDto);
     }
 

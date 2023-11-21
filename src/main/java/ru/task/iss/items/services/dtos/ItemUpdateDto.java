@@ -14,4 +14,6 @@ public class ItemUpdateDto {
     private String name;
 
     private Double price;
+
+    private Long amount;
 }

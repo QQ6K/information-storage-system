@@ -5,7 +5,7 @@ import ru.task.iss.models.Item;
 public class ItemMapper {
 
     public static ItemUpdateDto toUpdateDto(Item item){
-        return new ItemUpdateDto(item.getId(),item.getName(),item.getPrice());
+        return new ItemUpdateDto(item.getId(),item.getName(),item.getPrice(), item.getAmount());
     }
 
     public static ItemDto toDto(Item item){

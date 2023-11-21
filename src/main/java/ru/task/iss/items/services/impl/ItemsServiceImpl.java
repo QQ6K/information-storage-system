@@ -62,6 +62,7 @@ public class ItemsServiceImpl implements ItemService {
         Item item = findItemInRepository(itemId);
         Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
         Optional.ofNullable(itemDto.getPrice()).ifPresent(item::setPrice);
+        Optional.ofNullable(itemDto.getAmount()).ifPresent(item::setAmount);
         return ItemMapper.toUpdateDto(itemsRepository.save(item));
     }
 
