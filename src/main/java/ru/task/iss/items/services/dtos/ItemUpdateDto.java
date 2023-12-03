@@ -11,6 +11,8 @@ public class ItemUpdateDto {
 
     private Long id;
 
+    private Long vendorCode;
+
     private String name;
 
     private Double price;

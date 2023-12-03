@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ItemDto {
 
+    private Long vendorCode;
+
     private String name;
 
     private Double price;

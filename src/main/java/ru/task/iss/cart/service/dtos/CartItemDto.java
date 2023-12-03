@@ -1,19 +1,17 @@
-package ru.task.iss.models;
+package ru.task.iss.cart.service.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "items")
-public class Item {
+public class CartItemDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

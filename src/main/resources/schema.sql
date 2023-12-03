@@ -1,4 +1,5 @@
 drop table if exists items cascade;
+drop table if exists cartItems cascade;
 /*drop table if exists discounts cascade;*/
 /*drop table if exists basket cascade;
 drop table if exists basketItems cascade;
@@ -9,10 +10,20 @@ drop table if exists salesItems cascade;*/
 
 CREATE TABLE IF NOT EXISTS items
 (
-    id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name  VARCHAR(128)                            NOT NULL,
-    price double precision                        NOT NULL,
-    amount BIGINT                                 NOT NULL
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    vendor_code BIGINT           NOT NULL,
+    name       VARCHAR(128)     NOT NULL,
+    price      double precision NOT NULL,
+    amount     BIGINT           NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS cart_items
+(
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    vendor_code BIGINT           NOT NULL,
+    name       VARCHAR(128)     NOT NULL,
+    price      double precision NOT NULL,
+    amount     BIGINT           NOT NULL
 );
 
 /*CREATE TABLE IF NOT EXISTS discounts
