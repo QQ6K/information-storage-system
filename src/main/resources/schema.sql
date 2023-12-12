@@ -1,5 +1,6 @@
 drop table if exists items cascade;
 drop table if exists cartItems cascade;
+drop table if exists sales cascade;
 /*drop table if exists discounts cascade;*/
 /*drop table if exists basket cascade;
 drop table if exists basketItems cascade;
@@ -26,31 +27,46 @@ CREATE TABLE IF NOT EXISTS cart_items
     amount     BIGINT           NOT NULL
 );
 
-/*CREATE TABLE IF NOT EXISTS discounts
+CREATE TABLE IF NOT EXISTS sales
+(
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    sales_code BIGINT           NOT NULL,
+    name       VARCHAR(128)     NOT NULL,
+    price      double precision NOT NULL,
+    amount     BIGINT           NOT NULL,
+    discount double precision NOT NULL,
+    discount_code BIGINT           NOT NULL,
+    final_price double precision NOT NULL,
+    total_price double precision NOT NULL,
+    created_on TIMESTAMP DEFAULT NOW()
+);
+
+
+CREATE TABLE IF NOT EXISTS discounts
 (
     id              BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    val_coefficient DOUBLE precision                          NOT NULL,
-    item_id         BIGINT                                  NOT null REFERENCES items (id),
+    coefficient DOUBLE precision                          NOT NULL,
+    item_vendor_code       BIGINT                        NOT null REFERENCES items (id),
     starting        timestamp                               not null,
     ending          timestamp                               not null
 );
 
-CREATE TABLE IF NOT EXISTS sales
-(
-    id           BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    created_on   TIMESTAMP DEFAULT NOW(),
-    orderItem_id BIGINT,
-    total_amount DOUBLE PRECISION
-);
-
-CREATE TABLE IF NOT EXISTS salesItems
-(
-    id             BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    item_id        BIGINT                                  NOT null REFERENCES items (id),
-    fixedItemPrice DOUBLE PRECISION                                  NOT NULL,
-    count          SMALLINT                                NOT NULL,
-    basket_id      BIGINT                                  NOT null REFERENCES sales (id)
-);
+-- CREATE TABLE IF NOT EXISTS sales
+-- (
+--     id           BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+--     created_on   TIMESTAMP DEFAULT NOW(),
+--     orderItem_id BIGINT,
+--     total_amount DOUBLE PRECISION
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS salesItems
+-- (
+--     id             BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+--     item_id        BIGINT                                  NOT null REFERENCES items (id),
+--     fixedItemPrice DOUBLE PRECISION                                  NOT NULL,
+--     count          SMALLINT                                NOT NULL,
+--     basket_id      BIGINT                                  NOT null REFERENCES sales (id)
+-- );
 
 /*CREATE TABLE IF NOT EXISTS basketItems
 (

@@ -45,4 +45,12 @@ public class CartController {
         log.info("Запрос DELETE удаление товаров из корзины /cart");
         cartService.cleanCart();
     }
+
+    @PostMapping("/buy")
+    public void buyCart(
+    ) {
+        log.info("Запрос POST купить корзину /cart/buy");
+        return;
+        //cartService.buyCart();
+    }
 }

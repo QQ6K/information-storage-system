@@ -19,9 +19,13 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long salesCode;
+    private String name;
+    private double price;
+    private Long amount;
+    private double discount;
+    private Long discountCode;
+    private double finalPrice;
+    private double totalPrice;
     private LocalDateTime createdOn;
-    @OneToMany
-    @JoinTable(name = "salesItems",joinColumns = @JoinColumn(name = "id"))
-    private List<saleItem> saleItems;
-    private double totalAmount;
 }
