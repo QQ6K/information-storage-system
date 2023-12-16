@@ -50,7 +50,6 @@ public class CartController {
     public void buyCart(
     ) {
         log.info("Запрос POST купить корзину /cart/buy");
-        return;
-        //cartService.buyCart();
+        cartService.buyCart();
     }
 }

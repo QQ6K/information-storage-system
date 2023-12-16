@@ -5,10 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.CartItemsRepository;
+import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
 import ru.task.iss.cart.service.dtos.CartItemDto;
+import ru.task.iss.common.FromCartToSalesMapper;
 import ru.task.iss.models.CartItem;
+import ru.task.iss.models.Sale;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -19,6 +23,12 @@ import java.util.Optional;
 public class CartServiceImpl implements CartService {
 
     private final CartItemsRepository cartItemsRepository;
+
+    private final SalesRepository salesRepository;
+
+    private void clearCart(){
+        cartItemsRepository.deleteAll();
+    }
 
     @Transactional
     @Override
@@ -46,10 +56,33 @@ public class CartServiceImpl implements CartService {
     }
 
 
-    @Override
     @Transactional
+    @Override
     public void cleanCart() {
         log.info("Очистка корзины");
-        cartItemsRepository.deleteAll();
+        clearCart();
+    }
+
+    @Transactional
+    @Override
+    public void buyCart() {
+        Long salesCode = salesRepository.findMaximum();
+        if (salesCode == null) {salesCode = 0L;}
+        Collection<CartItem> cart= cartItemsRepository.findAll();
+        salesCode++;
+        for (CartItem cartItem: cart) {
+            Sale sale = new Sale();
+            sale.setSalesCode(salesCode);
+            sale.setName(cartItem.getName());
+            sale.setPrice(cartItem.getPrice());
+            sale.setAmount(cartItem.getAmount());
+            sale.setDiscount(0);
+            sale.setDiscountCode(0L);
+            sale.setFinalPrice(0);
+            sale.setTotalPrice(0);
+            sale.setCreatedOn(LocalDateTime.now());
+            salesRepository.save(sale);
+        }
+        clearCart();
     }
 }

@@ -17,4 +17,7 @@ public interface CartService {
 
     @Transactional
     void cleanCart();
+
+    @Transactional
+    void buyCart();
 }

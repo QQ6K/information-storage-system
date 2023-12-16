@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS cart_items
 CREATE TABLE IF NOT EXISTS sales
 (
     id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sales_code BIGINT           NOT NULL,
+    code BIGINT           NOT NULL,
     name       VARCHAR(128)     NOT NULL,
     price      double precision NOT NULL,
     amount     BIGINT           NOT NULL,
