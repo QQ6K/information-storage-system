@@ -17,4 +17,9 @@ public interface ItemsRepository extends JpaRepository<Item,Long> {
     public Long findMax();
 
     Page<Item> findAll( Pageable pageable);
+
+    Item findByVendorCode(Long vendorCore);
+
+    @Query(value = "select vendor_code from ITEMS order by RANDOM() LIMIT 1", nativeQuery = true)
+    public Long getRandomItem();
 }

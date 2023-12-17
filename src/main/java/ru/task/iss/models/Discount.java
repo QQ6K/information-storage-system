@@ -17,9 +17,9 @@ public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private double valCoefficient;
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private Item item;
+    private double coefficient;
+    @Column(name = "item_vendor_code")
+    private Long itemVendorCode;
     private LocalDateTime starting;
     private LocalDateTime ending;
 

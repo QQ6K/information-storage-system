@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.CartItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
-import ru.task.iss.cart.service.dtos.CartItemDto;
-import ru.task.iss.common.FromCartToSalesMapper;
+import ru.task.iss.exceptions.BadRequestException;
+import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.models.CartItem;
+import ru.task.iss.models.Item;
 import ru.task.iss.models.Sale;
 
 import java.time.LocalDateTime;
@@ -26,8 +27,16 @@ public class CartServiceImpl implements CartService {
 
     private final SalesRepository salesRepository;
 
-    private void clearCart(){
+    private final ItemsRepository itemsRepository;
+
+    private void clearCart() {
         cartItemsRepository.deleteAll();
+    }
+
+    private void validateAmount(Long itemFromRepositoryAmount, Long cartItemToSaveAmount) {
+        if (itemFromRepositoryAmount > cartItemToSaveAmount) {
+            throw new BadRequestException("Количество в корзине больше, чем на складе!");
+        }
     }
 
     @Transactional
@@ -35,10 +44,11 @@ public class CartServiceImpl implements CartService {
     public CartItem addItemToCart(CartItem cartItem) {
         log.info("Добавление товара в корзину");
         CartItem cartItemToSave = cartItemsRepository.findByVendorCode(cartItem.getVendorCode());
+        Item itemFromRepository = itemsRepository.findByVendorCode(cartItem.getVendorCode());
+        validateAmount(itemFromRepository.getAmount(), itemFromRepository.getAmount());
         if (Optional.ofNullable(cartItemToSave).isPresent()) {
             cartItemToSave.setAmount(cartItem.getAmount());
-        }
-        else cartItemToSave = cartItem;
+        } else cartItemToSave = cartItem;
         return cartItemsRepository.save(cartItemToSave);
     }
 
@@ -59,18 +69,20 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public void cleanCart() {
-        log.info("Очистка корзины");
         clearCart();
+        log.info("Очистка корзины");
     }
 
     @Transactional
     @Override
     public void buyCart() {
         Long salesCode = salesRepository.findMaximum();
-        if (salesCode == null) {salesCode = 0L;}
-        Collection<CartItem> cart= cartItemsRepository.findAll();
+        if (salesCode == null) {
+            salesCode = 0L;
+        }
+        Collection<CartItem> cart = cartItemsRepository.findAll();
         salesCode++;
-        for (CartItem cartItem: cart) {
+        for (CartItem cartItem : cart) {
             Sale sale = new Sale();
             sale.setSalesCode(salesCode);
             sale.setName(cartItem.getName());
@@ -84,5 +96,6 @@ public class CartServiceImpl implements CartService {
             salesRepository.save(sale);
         }
         clearCart();
+        log.info("Покупка корзины");
     }
 }

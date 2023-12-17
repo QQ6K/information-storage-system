@@ -17,7 +17,7 @@ import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
-/*@Service
+@Service
 @RequiredArgsConstructor
 @EnableScheduling
 @Transactional(readOnly = true)
@@ -38,33 +38,32 @@ public class DiscountSchedulerService {
    @Transactional
     public void scheduleDiscount() {
         Discount discount = new Discount();
-        discount.setValCoefficient(
+        discount.setCoefficient(
                 (100.00 - ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
                         / 100.00);
-        discount.setItem(getRandomItem());
+        discount.setItemVendorCode(getRandomVendorCode());
         discount.setStarting(LocalDateTime.now());
-        discount.setEnding(discount.getStarting().plusMinutes(1));
+        discount.setEnding(discount.getStarting().plusMinutes(3));
         discount = discountRepository.save(discount);
         log.info("Шайтан машина делает скидку id = {}, для {}, коээфициент для цены будет {}," +
                         " будет длиться с {} до {}",
-                discount.getId(), discount.getItem().getName(), discount.getValCoefficient(), discount.getStarting(),
+                discount.getId(), discount.getItemVendorCode(), discount.getCoefficient(), discount.getStarting(),
                 discount.getEnding());
     }
 
-    private Item getRandomItem() {
-        Long n = itemsRepository.count();
-        Long max = itemsRepository.findMax();
-        Long id = null;
-        if (n != 0) {
-            log.info("Репозиторий товаров id = {}", n);
-            log.info("Репозиторий товаров max id = {}", max);
-            id = itemsRepository.getRandom();
-            log.info("Случайный товар id = {}", id);
-        }
-        else throw new CrudException("Empty repository");
-        return itemsRepository.findById(id
-                )
-                .orElseThrow(() -> new CrudException("Cannot find random Item element"));
+    private Long getRandomVendorCode() {
+       // Long n = itemsRepository.count();
+       // Long max = itemsRepository.findMax();
+       // Long id = null;
+       // if (n != 0) {
+        //    log.info("Репозиторий товаров id = {}", n);
+        //    log.info("Репозиторий товаров max id = {}", max);
+           long vendorCode = itemsRepository.getRandomItem();
+         //   log.info("Случайный товар id = {}", id);
+       // }
+        //throw new CrudException("Empty repository");
+        //itemsRepository.findByVendorCode(vendorCode);
+        return vendorCode;
     }
 
     public Discount getCurrentDiscount() {
@@ -76,4 +75,4 @@ public class DiscountSchedulerService {
     }
 
 
-}*/
+}
