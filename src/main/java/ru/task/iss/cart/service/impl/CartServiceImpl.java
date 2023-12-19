@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.CartItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
+import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.BadRequestException;
 import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.models.CartItem;
+import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
 import ru.task.iss.models.Sale;
 
@@ -28,6 +30,8 @@ public class CartServiceImpl implements CartService {
     private final SalesRepository salesRepository;
 
     private final ItemsRepository itemsRepository;
+
+    private final DiscountRepository discountRepository;
 
     private void clearCart() {
         cartItemsRepository.deleteAll();
@@ -82,18 +86,26 @@ public class CartServiceImpl implements CartService {
         }
         Collection<CartItem> cart = cartItemsRepository.findAll();
         salesCode++;
+        Discount discount = discountRepository.findFirstByOrderByIdDesc();
+        Double coefficient = 1.0;
         for (CartItem cartItem : cart) {
+            if (discount.getItemVendorCode() == cartItem.getVendorCode()) {
+                coefficient = (100 - discount.getCoefficient()) / 100;
+            }
+            Item itemNewAmount = itemsRepository.findByVendorCode(cartItem.getVendorCode());
             Sale sale = new Sale();
             sale.setSalesCode(salesCode);
             sale.setName(cartItem.getName());
             sale.setPrice(cartItem.getPrice());
             sale.setAmount(cartItem.getAmount());
-            sale.setDiscount(0);
-            sale.setDiscountCode(0L);
-            sale.setFinalPrice(0);
-            sale.setTotalPrice(0);
+            sale.setDiscount(discount.getCoefficient());
+            sale.setDiscountCode(discount.getDiscountCode());
+            sale.setFinalPrice(cartItem.getPrice() * coefficient);
+            sale.setTotalPrice(cartItem.getPrice() * coefficient * cartItem.getAmount());
             sale.setCreatedOn(LocalDateTime.now());
             salesRepository.save(sale);
+            itemNewAmount.setAmount(itemNewAmount.getAmount() - cartItem.getAmount());
+            itemsRepository.save(itemNewAmount);
         }
         clearCart();
         log.info("Покупка корзины");

@@ -34,20 +34,23 @@ public class DiscountSchedulerService {
     //private static final String cron = "0 0 * * * *";
 
    // @Scheduled(cron = cron)
-   @Scheduled(fixedDelay = 10000)
+   @Scheduled(fixedDelay = 60000)
    @Transactional
     public void scheduleDiscount() {
         Discount discount = new Discount();
         discount.setCoefficient(
-                (100.00 - ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
-                        / 100.00);
+                (ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
+        );
         discount.setItemVendorCode(getRandomVendorCode());
         discount.setStarting(LocalDateTime.now());
-        discount.setEnding(discount.getStarting().plusMinutes(3));
-        discount = discountRepository.save(discount);
-        log.info("Шайтан машина делает скидку id = {}, для {}, коээфициент для цены будет {}," +
+        discount.setEnding(discount.getStarting().plusMinutes(1));
+        discountRepository.save(discount);
+        discount = discountRepository.findFirstByOrderByIdDesc();
+        discount.setDiscountCode(discount.getId());
+        discountRepository.save(discount);
+        log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {}, коээфициент для цены будет {}," +
                         " будет длиться с {} до {}",
-                discount.getId(), discount.getItemVendorCode(), discount.getCoefficient(), discount.getStarting(),
+                discount.getId(), discount.getDiscountCode(), discount.getItemVendorCode(), discount.getCoefficient(), discount.getStarting(),
                 discount.getEnding());
     }
 

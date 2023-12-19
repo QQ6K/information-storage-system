@@ -1,6 +1,7 @@
 drop table if exists items cascade;
 drop table if exists cartItems cascade;
 drop table if exists sales cascade;
+drop table if exists discounts cascade;
 /*drop table if exists discounts cascade;*/
 /*drop table if exists basket cascade;
 drop table if exists basketItems cascade;
@@ -11,44 +12,45 @@ drop table if exists salesItems cascade;*/
 
 CREATE TABLE IF NOT EXISTS items
 (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT           NOT NULL,
-    name       VARCHAR(128)     NOT NULL,
-    price      double precision NOT NULL,
-    amount     BIGINT           NOT NULL
+    name        VARCHAR(128)     NOT NULL,
+    price       double precision NOT NULL,
+    amount      BIGINT           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS cart_items
 (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT           NOT NULL,
-    name       VARCHAR(128)     NOT NULL,
-    price      double precision NOT NULL,
-    amount     BIGINT           NOT NULL
+    name        VARCHAR(128)     NOT NULL,
+    price       double precision NOT NULL,
+    amount      BIGINT           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS sales
 (
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    code BIGINT           NOT NULL,
-    name       VARCHAR(128)     NOT NULL,
-    price      double precision NOT NULL,
-    amount     BIGINT           NOT NULL,
-    discount double precision NOT NULL,
-    discount_code BIGINT           NOT NULL,
-    final_price double precision NOT NULL,
-    total_price double precision NOT NULL,
-    created_on TIMESTAMP DEFAULT NOW()
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code          BIGINT           NOT NULL,
+    name          VARCHAR(128)     NOT NULL,
+    price         double precision NOT NULL,
+    final_price   double precision NOT NULL,
+    total_price   double precision NOT NULL,
+    amount        BIGINT           NOT NULL,
+    discount      double precision NOT NULL,
+    discount_code BIGINT           NOT NULL,--возможно сразу сюда писать?
+    created_on    TIMESTAMP DEFAULT NOW()
 );
 
 
 CREATE TABLE IF NOT EXISTS discounts
 (
-    id              BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    coefficient DOUBLE precision                          NOT NULL,
-    item_vendor_code       BIGINT                        NOT null REFERENCES items (id),
-    starting        timestamp                               not null,
-    ending          timestamp                               not null
+    id               BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+    discount_code    BIGINT                             ,
+    coefficient      DOUBLE precision                    NOT NULL,
+    item_vendor_code BIGINT                              NOT null,
+    starting         timestamp                           not null,
+    ending           timestamp                           not null
 );
 
 -- CREATE TABLE IF NOT EXISTS sales

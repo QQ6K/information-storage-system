@@ -17,6 +17,8 @@ public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "discount_code")
+    private Long discountCode;
     private double coefficient;
     @Column(name = "item_vendor_code")
     private Long itemVendorCode;
