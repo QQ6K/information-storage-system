@@ -22,6 +22,7 @@ public class Discount {
     private double coefficient;
     @Column(name = "item_vendor_code")
     private Long itemVendorCode;
+    private String name;
     private LocalDateTime starting;
     private LocalDateTime ending;
 

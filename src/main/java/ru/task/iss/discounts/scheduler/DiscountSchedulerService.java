@@ -37,36 +37,38 @@ public class DiscountSchedulerService {
    @Scheduled(fixedDelay = 60000)
    @Transactional
     public void scheduleDiscount() {
+       Item item = getRandomItem();
         Discount discount = new Discount();
         discount.setCoefficient(
                 (ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
         );
-        discount.setItemVendorCode(getRandomVendorCode());
+        discount.setItemVendorCode(item.getVendorCode());
+        discount.setName(item.getName());
         discount.setStarting(LocalDateTime.now());
         discount.setEnding(discount.getStarting().plusMinutes(1));
         discountRepository.save(discount);
         discount = discountRepository.findFirstByOrderByIdDesc();
         discount.setDiscountCode(discount.getId());
         discountRepository.save(discount);
-        log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {}, коээфициент для цены будет {}," +
+        log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {} {}, коээфициент для цены будет {}," +
                         " будет длиться с {} до {}",
-                discount.getId(), discount.getDiscountCode(), discount.getItemVendorCode(), discount.getCoefficient(), discount.getStarting(),
+                discount.getId(), discount.getDiscountCode(), discount.getItemVendorCode(), discount.getName(), discount.getCoefficient(), discount.getStarting(),
                 discount.getEnding());
     }
 
-    private Long getRandomVendorCode() {
+    private Item getRandomItem() {
        // Long n = itemsRepository.count();
        // Long max = itemsRepository.findMax();
        // Long id = null;
        // if (n != 0) {
         //    log.info("Репозиторий товаров id = {}", n);
         //    log.info("Репозиторий товаров max id = {}", max);
-           long vendorCode = itemsRepository.getRandomItem();
+           Item item = itemsRepository.getRandomItem();
          //   log.info("Случайный товар id = {}", id);
        // }
         //throw new CrudException("Empty repository");
         //itemsRepository.findByVendorCode(vendorCode);
-        return vendorCode;
+        return item;
     }
 
     public Discount getCurrentDiscount() {

@@ -21,5 +21,8 @@ public interface ItemsRepository extends JpaRepository<Item,Long> {
     Item findByVendorCode(Long vendorCore);
 
     @Query(value = "select vendor_code from ITEMS order by RANDOM() LIMIT 1", nativeQuery = true)
-    public Long getRandomItem();
+    public Long getRandomVendorCode();
+
+    @Query(value = "select * from ITEMS order by RANDOM() LIMIT 1", nativeQuery = true)
+    public Item getRandomItem();
 }
