@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class DiscountControllers {
 
-    DiscountService discountService;
+    private final DiscountService discountService;
 
     /*@GetMapping
     public List<Discount> getDiscountHistory(){
@@ -31,7 +31,7 @@ public class DiscountControllers {
     }*/
 
     @GetMapping
-    public PageDTO<Discount> getItems(
+    public PageDTO<Discount> getHistory(
             @RequestParam(defaultValue = "0", required = false) Integer from,
             @RequestParam(defaultValue = "10", required = false) Integer size,
             @RequestParam(required = false) Integer page, HttpServletRequest request) {
@@ -44,7 +44,7 @@ public class DiscountControllers {
             if (page == null) {page =  from / size;};
             pageable = PageRequest.of(page, size);
         }
-        log.info("Запрос GET /items?size={}&page={}", size, page);
+        log.info("Запрос GET /discounts?size={}&page={}", size, page);
         return discountService.getDiscountsPage(pageable);
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 public class DiscountServiceImpl implements DiscountService {
 
-    DiscountRepository discountRepository;
+    private final DiscountRepository discountRepository;
 
     private final PageToPageDTOMapper<Discount> pageToPageDTOMapper;
 

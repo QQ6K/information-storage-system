@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS sales
 CREATE TABLE IF NOT EXISTS discounts
 (
     id               BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
-    discount_code    BIGINT                             ,
+    discount_code    BIGINT,
+    name             VARCHAR(128)                        NOT NULL,
     coefficient      DOUBLE precision                    NOT NULL,
     item_vendor_code BIGINT                              NOT null,
     starting         timestamp                           not null,
