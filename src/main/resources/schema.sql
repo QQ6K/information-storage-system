@@ -1,7 +1,7 @@
 drop table if exists items cascade;
-drop table if exists cartItems cascade;
-drop table if exists sales cascade;
-drop table if exists discounts cascade;
+--drop table if exists cart_items cascade;
+--drop table if exists sales cascade;
+--drop table if exists discounts cascade;
 /*drop table if exists discounts cascade;*/
 /*drop table if exists basket cascade;
 drop table if exists basketItems cascade;
@@ -53,6 +53,8 @@ CREATE TABLE IF NOT EXISTS discounts
     starting         timestamp                           not null,
     ending           timestamp                           not null
 );
+
+
 
 -- CREATE TABLE IF NOT EXISTS sales
 -- (

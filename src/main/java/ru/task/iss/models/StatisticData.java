@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,7 +17,9 @@ public class StatisticData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long countReceipts;
+    private LocalDateTime starting;
+    private LocalDateTime ending;
+    private Long countReceipts; // количество чеков
     private Double fullSum; //общая стоимость чеков
     private Double avgFull; //стоимость среднего чека
     private Double discountSum; //сумма скидок

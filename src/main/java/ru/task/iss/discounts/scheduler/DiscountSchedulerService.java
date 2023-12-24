@@ -34,7 +34,7 @@ public class DiscountSchedulerService {
     //private static final String cron = "0 0 * * * *";
 
    // @Scheduled(cron = cron)
-   @Scheduled(fixedDelay = 60000)
+   @Scheduled(fixedDelay = 600000)
    @Transactional
     public void scheduleDiscount() {
        Item item = getRandomItem();
