@@ -1,4 +1,5 @@
 drop table if exists items cascade;
+drop table if exists statistics cascade;
 --drop table if exists cart_items cascade;
 --drop table if exists sales cascade;
 --drop table if exists discounts cascade;
@@ -50,11 +51,24 @@ CREATE TABLE IF NOT EXISTS discounts
     name             VARCHAR(128)                        NOT NULL,
     coefficient      DOUBLE precision                    NOT NULL,
     item_vendor_code BIGINT                              NOT null,
-    starting         timestamp                           not null,
-    ending           timestamp                           not null
+    starting         TIMESTAMP                           not null,
+    ending           TIMESTAMP                           not null
 );
 
-
+CREATE TABLE IF NOT EXISTS statistics
+(
+    id                        BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
+    datetime_code             BIGINT                              NOT NULL,
+    starting                  TIMESTAMP                           NOT NULL,
+    ending                    TIMESTAMP                           NOT NULL,
+    count_receipts            INT                                 NOT NULL,
+    sum_without_discounts     DOUBLE precision                    NOT NULL,
+    avg_sum_without_discounts DOUBLE precision                    NOT NULL,
+    discount_sum              DOUBLE precision                    NOT NULL,
+    sum_with_discounts        DOUBLE precision                    NOT NULL,
+    avg_sum_with_discounts    DOUBLE precision                    NOT NULL,
+    increase_receipts         DOUBLE precision                    NOT NULL
+);
 
 -- CREATE TABLE IF NOT EXISTS sales
 -- (

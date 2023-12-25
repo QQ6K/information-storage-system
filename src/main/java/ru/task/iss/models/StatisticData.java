@@ -2,10 +2,7 @@ package ru.task.iss.models;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,18 +10,26 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "statistics")
 public class StatisticData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long datetime_code; //дата+час
     private LocalDateTime starting;
     private LocalDateTime ending;
+    @Column(name = "count_receipts")
     private Long countReceipts; // количество чеков
-    private Double fullSum; //общая стоимость чеков
-    private Double avgFull; //стоимость среднего чека
+    @Column(name = "sum_without_discounts")
+    private Double sumWithoutDiscounts; //общая стоимость чеков
+    @Column(name = "avg_sum_without_discounts")
+    private Double avgSumWithoutDiscounts; //стоимость среднего чека
+    @Column(name = "discount_sum")
     private Double discountSum; //сумма скидок
+    @Column(name = "sum_with_discounts")
     private Double sumWithDiscount; //общая стоимость с учетом скидок
+    @Column(name = "avg_sum_with_discounts")
     private Double avgWithDiscount; //стоимость среднего чека с учетом скидок
+    @Column(name = "increase_receipts")
     private Double increase; // прирост среднего чека к предыдущему часу
-
 }
