@@ -12,7 +12,6 @@ import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
 //import ru.task.iss.sales.services.SalesService;
-import ru.task.iss.sales.services.dtos.UpdateBucketShortDto;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;

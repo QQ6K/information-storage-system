@@ -5,15 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.CartItemsRepository;
+import ru.task.iss.cart.repository.SaleItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.BadRequestException;
 import ru.task.iss.items.repositories.ItemsRepository;
-import ru.task.iss.models.CartItem;
-import ru.task.iss.models.Discount;
-import ru.task.iss.models.Item;
-import ru.task.iss.models.Sale;
+import ru.task.iss.models.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -26,6 +24,8 @@ import java.util.Optional;
 public class CartServiceImpl implements CartService {
 
     private final CartItemsRepository cartItemsRepository;
+
+    private final SaleItemsRepository saleItemsRepository;
 
     private final SalesRepository salesRepository;
 
@@ -46,13 +46,13 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public CartItem addItemToCart(CartItem cartItem) {
-        log.info("Добавление товара в корзину");
         CartItem cartItemToSave = cartItemsRepository.findByVendorCode(cartItem.getVendorCode());
         Item itemFromRepository = itemsRepository.findByVendorCode(cartItem.getVendorCode());
         validateAmount(itemFromRepository.getAmount(), itemFromRepository.getAmount());
         if (Optional.ofNullable(cartItemToSave).isPresent()) {
             cartItemToSave.setAmount(cartItem.getAmount());
         } else cartItemToSave = cartItem;
+        log.info("Добавление товара в корзину {} ", cartItemToSave.getName());
         return cartItemsRepository.save(cartItemToSave);
     }
 
@@ -80,12 +80,14 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public void buyCart() {
-        Long salesCode = salesRepository.findMaximum();
-        if (salesCode == null) {
-            salesCode = 0L;
+        Long saleCode = saleItemsRepository.findMaximum();
+        log.info("поковырялись в репозитории нашли КОД {}", saleCode);
+        if (saleCode == null) {
+            saleCode = 0L;
         }
+        log.info("установлен прошлый КОД {}", saleCode);
         Collection<CartItem> cart = cartItemsRepository.findAll();
-        salesCode++;
+        saleCode++;
         Discount discount = discountRepository.findFirstByOrderByIdDesc();
         Double coefficient = 1.0;
         for (CartItem cartItem : cart) {
@@ -93,21 +95,29 @@ public class CartServiceImpl implements CartService {
                 coefficient = (100 - discount.getCoefficient()) / 100;
             }
             Item itemNewAmount = itemsRepository.findByVendorCode(cartItem.getVendorCode());
-            Sale sale = new Sale();
-            sale.setSalesCode(salesCode);
-            sale.setName(cartItem.getName());
-            sale.setPrice(cartItem.getPrice());
-            sale.setAmount(cartItem.getAmount());
-            sale.setDiscount(discount.getCoefficient());
-            sale.setDiscountCode(discount.getDiscountCode());
-            sale.setFinalPrice(cartItem.getPrice() * coefficient);
-            sale.setTotalPrice(cartItem.getPrice() * coefficient * cartItem.getAmount());
-            sale.setCreatedOn(LocalDateTime.now());
-            salesRepository.save(sale);
+            SaleItem saleItem = new SaleItem();
+            saleItem.setSalesCode(saleCode);
+            saleItem.setName(cartItem.getName());
+            saleItem.setPrice(cartItem.getPrice());
+            saleItem.setAmount(cartItem.getAmount());
+            saleItem.setDiscount(discount.getCoefficient());
+            saleItem.setDiscountCode(discount.getDiscountCode());
+            saleItem.setFinalPrice(cartItem.getPrice() * coefficient);
+            saleItem.setTotalPrice(cartItem.getPrice() * coefficient * cartItem.getAmount());
+            saleItem.setCreatedOn(LocalDateTime.now());
+            saleItemsRepository.save(saleItem);
             itemNewAmount.setAmount(itemNewAmount.getAmount() - cartItem.getAmount());
             itemsRepository.save(itemNewAmount);
         }
         clearCart();
         log.info("Покупка корзины");
+    }
+
+    @Transactional
+    @Override
+    public void formingSale(int saleCode) {
+        Sale sale = new Sale();
+        Collection<Sale> sales = saleItemsRepository.getSalesByCode(saleCode);
+        salesRepository.save(sale);
     }
 }

@@ -4,21 +4,22 @@ import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.models.CartItem;
 import ru.task.iss.models.Item;
 import ru.task.iss.models.Sale;
+import ru.task.iss.models.SaleItem;
 
 import java.time.LocalDateTime;
 
 public class FromCartToSalesMapper {
-    public static Sale fromCartToSale(CartItem cartItem){
-        Sale sale =  new Sale();
+    public static SaleItem fromCartToSale(CartItem cartItem){
+        SaleItem saleItem =  new SaleItem();
         //sale.setSalesCode();
-        sale.setName(cartItem.getName());
-        sale.setPrice(cartItem.getPrice());
-        sale.setAmount(cartItem.getAmount());
+        saleItem.setName(cartItem.getName());
+        saleItem.setPrice(cartItem.getPrice());
+        saleItem.setAmount(cartItem.getAmount());
         //sale.setDiscount();
         //sale.setDiscountCode();
         //sale.setFinalPrice();
         //sale.setTotalPrice();
-        sale.setCreatedOn(LocalDateTime.now());
-        return sale;
+        saleItem.setCreatedOn(LocalDateTime.now());
+        return saleItem;
     }
 }

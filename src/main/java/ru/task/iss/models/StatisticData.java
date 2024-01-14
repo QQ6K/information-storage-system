@@ -11,15 +11,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "statistics")
+//билдер
 public class StatisticData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long datetime_code; //дата+час
+    @Column(name = "datetime_code")
+    private int dateTimeCode; //дата+час для статистики и получения
     private LocalDateTime starting;
     private LocalDateTime ending;
     @Column(name = "count_receipts")
-    private Long countReceipts; // количество чеков
+    private Integer countReceipts; // количество чеков
     @Column(name = "sum_without_discounts")
     private Double sumWithoutDiscounts; //общая стоимость чеков
     @Column(name = "avg_sum_without_discounts")

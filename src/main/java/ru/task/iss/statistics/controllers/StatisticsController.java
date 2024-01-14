@@ -23,6 +23,13 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
+    @GetMapping
+    public String getStat(
+    ) {
+        log.info("Запрос GET статистика /stat");
+        return "OK";
+    }
+
     @GetMapping("/calculate")
     public void getRecalculate(
     ) {
