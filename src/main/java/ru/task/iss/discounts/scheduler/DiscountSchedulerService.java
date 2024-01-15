@@ -49,7 +49,7 @@ public class DiscountSchedulerService {
         discount = discountRepository.findFirstByOrderByIdDesc();
         discount.setDiscountCode(discount.getId());
         discountRepository.save(discount);
-        log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {} {}, коээфициент для цены будет {}," +
+        log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {} {}, % скидки будет {}," +
                         " будет длиться с {} до {}",
                 discount.getId(), discount.getDiscountCode(), discount.getItemVendorCode(), discount.getName(), discount.getCoefficient(), discount.getStarting(),
                 discount.getEnding());

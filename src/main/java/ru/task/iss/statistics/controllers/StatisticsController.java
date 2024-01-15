@@ -44,7 +44,7 @@ public class StatisticsController {
         //return cartService.getItemsFromCart();
     }
 
-    @GetMapping
+    @GetMapping("/between")
     public void getStatForDuration(
     ) {
         log.info("Запрос GET на получение товаров из корзины /cart");

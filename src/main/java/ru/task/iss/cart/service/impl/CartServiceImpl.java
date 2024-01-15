@@ -90,34 +90,45 @@ public class CartServiceImpl implements CartService {
         saleCode++;
         Discount discount = discountRepository.findFirstByOrderByIdDesc();
         Double coefficient = 1.0;
+
+        Sale sale = Sale.builder()
+                .salesCode(saleCode)
+                .price(0.)
+                .finalPrice(0.)
+                .discountSum(0.)
+                .discountCode(0L)
+                .build();
+
         for (CartItem cartItem : cart) {
+            SaleItem saleItem = new SaleItem();
             if (discount.getItemVendorCode() == cartItem.getVendorCode()) {
                 coefficient = (100 - discount.getCoefficient()) / 100;
-            }
+                saleItem.setDiscountCode(discount.getDiscountCode());
+                saleItem.setDiscount(coefficient);
+            } else {saleItem.setDiscountCode(0L);
+                saleItem.setDiscount(1);
+            };
             Item itemNewAmount = itemsRepository.findByVendorCode(cartItem.getVendorCode());
-            SaleItem saleItem = new SaleItem();
             saleItem.setSalesCode(saleCode);
             saleItem.setName(cartItem.getName());
             saleItem.setPrice(cartItem.getPrice());
             saleItem.setAmount(cartItem.getAmount());
-            saleItem.setDiscount(discount.getCoefficient());
-            saleItem.setDiscountCode(discount.getDiscountCode());
             saleItem.setFinalPrice(cartItem.getPrice() * coefficient);
             saleItem.setTotalPrice(cartItem.getPrice() * coefficient * cartItem.getAmount());
             saleItem.setCreatedOn(LocalDateTime.now());
+
+            sale.setPrice(sale.getPrice() + saleItem.getPrice() * cartItem.getAmount());
+            sale.setFinalPrice(sale.getFinalPrice() + cartItem.getPrice() * coefficient * cartItem.getAmount());
+            sale.setDiscountSum(sale.getDiscountSum() + sale.getPrice() - sale.getFinalPrice());
+            sale.setDiscountCode(saleItem.getDiscountCode());
+
             saleItemsRepository.save(saleItem);
             itemNewAmount.setAmount(itemNewAmount.getAmount() - cartItem.getAmount());
             itemsRepository.save(itemNewAmount);
         }
         clearCart();
         log.info("Покупка корзины");
-    }
-
-    @Transactional
-    @Override
-    public void formingSale(int saleCode) {
-        Sale sale = new Sale();
-        Collection<Sale> sales = saleItemsRepository.getSalesByCode(saleCode);
+        sale.setCreatedOn(LocalDateTime.now());
         salesRepository.save(sale);
     }
 }

@@ -34,4 +34,7 @@ public class StatisticData {
     private Double avgWithDiscount; //стоимость среднего чека с учетом скидок
     @Column(name = "increase_receipts")
     private Double increase; // прирост среднего чека к предыдущему часу
+
+    @Column(name = "newest")
+    private Double newest;
 }

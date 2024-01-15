@@ -27,6 +27,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final StatisticsRepository statisticsRepository;
 
     @Override
+    @Transactional
     public void getRecalculate(){
         LocalDateTime startDate = salesRepository.getStartDate();
         LocalDateTime endDate = salesRepository.getEndDate();
@@ -42,7 +43,6 @@ public class StatisticsServiceImpl implements StatisticsService {
                 set.add(sale);
             }
             statisticData.setCountReceipts(set.size());
-
 
             Double sumWithoutDiscounts = 0.0;
             Double discountSum = 0.0;
@@ -75,7 +75,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
             statisticsRepository.save(statisticData);
         }
-        return;
     }
 
 

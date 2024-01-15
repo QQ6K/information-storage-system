@@ -1,9 +1,10 @@
 drop table if exists items cascade;
 drop table if exists statistics cascade;
---drop table if exists cart_items cascade;
+drop table if exists cart_items cascade;
 --drop table if exists cart_items cascade;
 --drop table if exists sales cascade;
 --drop table if exists discounts cascade;
+--drop table if exists sale_items cascade;
 /*drop table if exists discounts cascade;*/
 /*drop table if exists basket cascade;
 drop table if exists basketItems cascade;
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS sale_items
     total_price   double precision NOT NULL,
     amount        BIGINT           NOT NULL,
     discount      double precision NOT NULL,
-    discount_code BIGINT           NOT NULL,
+    discount_code BIGINT           ,
     created_on    TIMESTAMP DEFAULT NOW()
 );
 
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS sales
     price   double precision NOT NULL,
     final_price   double precision NOT NULL,
     discount_sum double precision NOT NULL,
-    discount_code BIGINT           NOT NULL,
+    discount_code BIGINT           ,
     created_on    TIMESTAMP DEFAULT NOW()
 );
 
@@ -70,13 +71,14 @@ CREATE TABLE IF NOT EXISTS statistics
 (
     id                        BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
     datetime_code             BIGINT                              NOT NULL,
-    starting                  TIMESTAMP                           NOT NULL,
-    ending                    TIMESTAMP                           NOT NULL,
+    starting                  TIMESTAMP                           ,
+    ending                    TIMESTAMP                           ,
     count_receipts            INT                                 NOT NULL,
     sum_without_discounts     DOUBLE precision                    NOT NULL,
     avg_sum_without_discounts DOUBLE precision                    NOT NULL,
     discount_sum              DOUBLE precision                    NOT NULL,
     sum_with_discounts        DOUBLE precision                    NOT NULL,
     avg_sum_with_discounts    DOUBLE precision                    NOT NULL,
-    increase_receipts         DOUBLE precision                    NOT NULL
+    increase_receipts         DOUBLE precision                    NOT NULL,
+    newest BOOLEAN NOT NULL
 );

@@ -1,9 +1,6 @@
 package ru.task.iss.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "sales")
+@Builder
 public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -20,10 +20,4 @@ public interface CartService {
 
     @Transactional
     void buyCart();
-
-    @Transactional
-    void formingSale();
-
-    @Transactional
-    void formingSale(int salesCode);
 }
