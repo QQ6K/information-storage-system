@@ -6,4 +6,6 @@ import ru.task.iss.models.StatisticData;
 public interface StatisticsRepository extends JpaRepository<StatisticData, Long> {
 
     StatisticData findFirstByOrderByDateTimeCodeDesc();
+
+    StatisticData findByDateTimeCode(int DateTimeCode);
 }

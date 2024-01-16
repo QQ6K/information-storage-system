@@ -80,5 +80,5 @@ CREATE TABLE IF NOT EXISTS statistics
     sum_with_discounts        DOUBLE precision                    NOT NULL,
     avg_sum_with_discounts    DOUBLE precision                    NOT NULL,
     increase_receipts         DOUBLE precision                    NOT NULL,
-    newest BOOLEAN NOT NULL
+    newest BOOLEAN
 );

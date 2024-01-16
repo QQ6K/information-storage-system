@@ -36,5 +36,5 @@ public class StatisticData {
     private Double increase; // прирост среднего чека к предыдущему часу
 
     @Column(name = "newest")
-    private Double newest;
+    private Boolean newest;
 }

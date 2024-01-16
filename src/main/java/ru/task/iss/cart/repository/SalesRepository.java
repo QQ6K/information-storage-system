@@ -12,10 +12,10 @@ import java.util.Collection;
 @Repository
 public interface SalesRepository extends JpaRepository<Sale,Long> {
 
-    @Query(value = "SELECT MIN(created_on) FROM sales s GROUP BY s.id limit 1", nativeQuery = true)
+    @Query(value = "SELECT MIN(created_on) FROM sales s", nativeQuery = true)
     LocalDateTime getStartDate();
 
-    @Query(value = "SELECT MAX(created_on) FROM sales s GROUP BY s.id limit 1", nativeQuery = true)
+    @Query(value = "SELECT MAX(created_on) FROM sales s", nativeQuery = true)
     LocalDateTime getEndDate();
 
     @Query(value = "SELECT * FROM sales s WHERE s.created_on BETWEEN :startDate AND :endDate", nativeQuery = true)
