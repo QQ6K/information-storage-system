@@ -2,12 +2,11 @@ package ru.task.iss.statistics.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.math3.util.Precision;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.task.iss.cart.repository.SaleItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.models.Sale;
-import ru.task.iss.models.SaleItem;
 import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.repositories.StatisticsRepository;
 import ru.task.iss.statistics.services.StatisticsService;
@@ -15,8 +14,6 @@ import ru.task.iss.statistics.services.StatisticsService;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,6 +24,15 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final SalesRepository salesRepository;
 
     private final StatisticsRepository statisticsRepository;
+
+
+    @Override
+    @Transactional
+    public Collection<StatisticData> getStat(){
+        Collection<StatisticData> statisticData= statisticsRepository.findAll();
+        log.info("Стат");
+        return statisticData;
+    }
 
     @Override
     @Transactional
@@ -55,15 +61,17 @@ public class StatisticsServiceImpl implements StatisticsService {
                 sumWithDiscount += sale.getFinalPrice();
             }
 
-            statisticData.setSumWithoutDiscounts(sumWithoutDiscounts);
-            statisticData.setAvgSumWithoutDiscounts(sumWithoutDiscounts / statisticData.getCountReceipts());
-            statisticData.setDiscountSum(discountSum);
-            statisticData.setSumWithDiscount(sumWithDiscount);
-            statisticData.setAvgWithDiscount(
-                    (statisticData.getCountReceipts() == 0 ? 0 : sumWithDiscount /statisticData.getCountReceipts()));
-
-
-
+            statisticData.setSumWithoutDiscounts(Precision.round(sumWithoutDiscounts, 2));
+            statisticData.setAvgSumWithoutDiscounts(
+                    statisticData.getCountReceipts() == 0
+                            ? 0
+                            : Precision.round(sumWithoutDiscounts / statisticData.getCountReceipts() , 2));
+            statisticData.setDiscountSum(Precision.round(discountSum,2));
+            statisticData.setSumWithDiscount(Precision.round(sumWithDiscount,2));
+            statisticData.setAvgSumWithDiscount(
+                    (statisticData.getCountReceipts() == 0
+                            ? 0
+                            : Precision.round(sumWithDiscount /statisticData.getCountReceipts(),2)));
 
             StringBuilder dateTimeCode = new StringBuilder(10);
             dateTimeCode
@@ -85,8 +93,8 @@ public class StatisticsServiceImpl implements StatisticsService {
                     .findByDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
             statisticData.setIncrease(
                     lastStatisticData != null
-                            ? statisticData.getAvgWithDiscount() - lastStatisticData.getAvgWithDiscount()
-                            : statisticData.getAvgWithDiscount());
+                            ? Precision.round(statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount(), 2)
+                            : Precision.round(statisticData.getAvgSumWithDiscount(),2));
 
 
             statisticData.setStarting(startDateTic);

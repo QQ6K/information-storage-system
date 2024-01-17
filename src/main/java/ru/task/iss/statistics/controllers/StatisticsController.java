@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.task.iss.exceptions.BadRequestException;
+import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.services.StatisticsService;
 import ru.task.iss.statistics.services.impl.StatisticsServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 
 
 @RestController
@@ -24,10 +26,10 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @GetMapping
-    public String getStat(
+    public Collection<StatisticData> getStat(
     ) {
         log.info("Запрос GET статистика /stat");
-        return "OK";
+        return statisticsService.getStat();
     }
 
     @GetMapping("/calculate")
