@@ -12,7 +12,7 @@ import java.util.List;
 public interface ItemService {
     ItemUpdateDto createItem(ItemDto itemDto);
 
-    ItemDto readItem(Long itemId);
+    ItemDto readItem(Long vendorCode);
 
     List<ItemUpdateDto> getItems();
 

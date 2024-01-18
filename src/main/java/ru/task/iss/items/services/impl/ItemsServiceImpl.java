@@ -38,8 +38,8 @@ public class ItemsServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto readItem(Long itemId){
-        return ItemMapper.toDto(findItemInRepository(itemId));
+    public ItemDto readItem(Long vendorCode){
+        return ItemMapper.toDto(findItemInRepository(vendorCode));
     }
 
     @Override
@@ -73,9 +73,9 @@ public class ItemsServiceImpl implements ItemService {
     }
 
     @Override
-    public Item findItemInRepository(Long itemId){
-        return itemsRepository.findById(itemId)
-                .orElseThrow(() -> new CrudException("Cannot find Item with id = " + itemId));
+    public Item findItemInRepository(Long vendorCode){
+        return itemsRepository.findByVendorCode(vendorCode);
+               // .orElseThrow(() -> new CrudException("Cannot find Item with id = " + itemId));
     }
 
 }

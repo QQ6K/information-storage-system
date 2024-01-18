@@ -103,6 +103,10 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
     }
 
+    @Override
+    public Collection<StatisticData> getStatForItem() {
+        return null;
+    }
 
 
 }

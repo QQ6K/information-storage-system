@@ -31,11 +31,11 @@ public class ItemsController {
         return itemService.createItem(itemDto);
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/{vendorCode}")
     public ItemDto readItem(
-            @PathVariable Long itemId
+            @PathVariable Long vendorCode
     ) {
-        return itemService.readItem(itemId);
+        return itemService.readItem(vendorCode);
     }
 
     @GetMapping
@@ -71,5 +71,7 @@ public class ItemsController {
     ) {
         itemService.deleteItem(itemId);
     }
+
+
 
 }

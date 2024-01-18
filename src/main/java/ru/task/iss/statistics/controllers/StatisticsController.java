@@ -39,12 +39,12 @@ public class StatisticsController {
         statisticsService.getRecalculate();
     }
 
-    @GetMapping("/{vendorCode}")
-    public void getStatForItem(
+    /*@GetMapping("/{vendorCode}")
+    public Collection<StatisticData> getStatForItem(
     ) {
         log.info("Запрос GET на получение товаров из корзины /cart");
-        //return cartService.getItemsFromCart();
-    }
+        return statisticsService.getStatForItem();
+    }*/
 
     @GetMapping("/between")
     public void getStatForDuration(

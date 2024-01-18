@@ -10,4 +10,6 @@ public interface StatisticsService {
     Collection<StatisticData> getStat();
 
     void getRecalculate();
+
+    Collection<StatisticData> getStatForItem();
 }
