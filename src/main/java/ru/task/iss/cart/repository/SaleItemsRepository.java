@@ -12,7 +12,7 @@ import java.util.Collection;
 @Repository
 public interface SaleItemsRepository extends JpaRepository<SaleItem,Long> {
 
-    @Query(value = "SELECT MAX(code) FROM sale_items", nativeQuery = true)
+    @Query(value = "SELECT MAX(sale_code) FROM sale_items", nativeQuery = true)
     Long findMaximum();
 
     @Query(value = "SELECT MIN(created_on) FROM sale_items s GROUP BY s.id limit 1", nativeQuery = true)
@@ -24,6 +24,6 @@ public interface SaleItemsRepository extends JpaRepository<SaleItem,Long> {
     @Query(value = "SELECT * FROM sale_items s WHERE s.created_on BETWEEN :startDate AND :endDate", nativeQuery = true)
     Collection<SaleItem> getSales(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query(value = "SELECT * FROM sale_items s WHERE s.code = :code", nativeQuery = true)
-    Collection<Sale> getSalesByCode(int code);
+    @Query(value = "SELECT * FROM sale_items s WHERE s.sale_code = :saleCode", nativeQuery = true)
+    Collection<Sale> getSalesByCode(int saleCode);
 }

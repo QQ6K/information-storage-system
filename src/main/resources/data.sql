@@ -1,4 +1,4 @@
-insert INTO ITEMS (id, vendor_code, name, price, amount)
+insert INTO ITEMS (id,  vendor_code, name, price, amount)
 values (default, 101, 'Дрель кондитерская', 55.20, 5);
 insert INTO ITEMS (id, vendor_code, name, price, amount)
 values (default, 102, 'Морская кладь', 160.15, 0);

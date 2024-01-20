@@ -16,9 +16,10 @@ import javax.persistence.*;
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    Long vendorCode;
-    String name;
-    Double price;
-    Long amount;
+    private Long id;
+    private Long vendorCode;
+    private Long itemId;
+    private String name;
+    private Double price;
+    private Long amount;
 }

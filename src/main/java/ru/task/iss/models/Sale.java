@@ -17,7 +17,7 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "code")
+    @Column(name = "sale_code")
     private Long salesCode;
     private double price;
     @Column(name = "final_price")

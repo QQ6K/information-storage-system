@@ -32,7 +32,7 @@ public class ItemsController {
     }
 
     @GetMapping("/{vendorCode}")
-    public ItemDto readItem(
+    public Item readItem(
             @PathVariable Long vendorCode
     ) {
         return itemService.readItem(vendorCode);

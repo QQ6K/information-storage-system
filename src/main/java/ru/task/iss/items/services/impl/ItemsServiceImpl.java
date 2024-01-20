@@ -38,8 +38,9 @@ public class ItemsServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto readItem(Long vendorCode){
-        return ItemMapper.toDto(findItemInRepository(vendorCode));
+    public Item readItem(Long vendorCode){
+        //return ItemMapper.toDto(findItemInRepository(vendorCode));
+        return findItemInRepository(vendorCode);
     }
 
     @Override

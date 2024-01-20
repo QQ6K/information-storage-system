@@ -21,6 +21,6 @@ public interface SalesRepository extends JpaRepository<Sale,Long> {
     @Query(value = "SELECT * FROM sales s WHERE s.created_on BETWEEN :startDate AND :endDate", nativeQuery = true)
     Collection<Sale> getSales(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query(value = "SELECT * FROM sales s WHERE s.code = :code", nativeQuery = true)
-    Collection<Sale> getSalesByCode(int code);
+    @Query(value = "SELECT * FROM sales s WHERE s.sale_code = :salesCode", nativeQuery = true)
+    Collection<Sale> getSalesByCode(int salesCode);
 }

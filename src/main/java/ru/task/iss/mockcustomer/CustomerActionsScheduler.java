@@ -22,7 +22,7 @@ public class CustomerActionsScheduler {
 
     private final ItemsRepository itemsRepository;
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(fixedDelay = 10000)
     @Transactional
     public void scheduleDiscount() {
         int action = ThreadLocalRandom.current().nextInt(1, 5);
@@ -41,6 +41,7 @@ public class CustomerActionsScheduler {
         cartItem.setName(item.getName());
         cartItem.setPrice(item.getPrice());
         cartItem.setVendorCode(item.getVendorCode());
+        cartItem.setItemId(item.getId());
         cartService.addItemToCart(cartItem);
     }
 
