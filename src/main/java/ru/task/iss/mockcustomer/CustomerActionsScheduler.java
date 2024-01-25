@@ -37,7 +37,7 @@ public class CustomerActionsScheduler {
     private void addItem() {
         Item item = itemsRepository.getRandomItem();
         CartItem cartItem = new CartItem();
-        cartItem.setAmount((long) ThreadLocalRandom.current().nextInt(1, 3));
+        cartItem.setAmount(ThreadLocalRandom.current().nextInt(1, 3));
         cartItem.setName(item.getName());
         cartItem.setPrice(item.getPrice());
         cartItem.setVendorCode(item.getVendorCode());

@@ -19,11 +19,11 @@ public class Sale {
     private Long id;
     @Column(name = "sale_code")
     private Long salesCode;
-    private double price;
+    private Integer price;
     @Column(name = "final_price")
-    private double finalPrice;
+    private Integer finalPrice;
     @Column(name = "discount_sum")
-    private double discountSum;
+    private Integer discountSum;
     @Column(name = "discount_code")
     private Long discountCode;
     private LocalDateTime createdOn;

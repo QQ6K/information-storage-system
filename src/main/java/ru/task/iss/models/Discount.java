@@ -19,7 +19,7 @@ public class Discount {
     private Long id;
     @Column(name = "discount_code")
     private Long discountCode;
-    private double coefficient;
+    private Integer coefficient;
     @Column(name = "item_vendor_code")
     private Long itemVendorCode;
     private String name;

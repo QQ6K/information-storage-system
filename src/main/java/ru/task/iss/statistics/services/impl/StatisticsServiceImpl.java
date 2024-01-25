@@ -51,9 +51,9 @@ public class StatisticsServiceImpl implements StatisticsService {
             StatisticData statisticData = new StatisticData();
             statisticData.setCountReceipts(sales.size());
 
-            double sumWithoutDiscounts = 0.0;
-            double discountSum = 0.0;
-            double sumWithDiscount = 0.0;
+            Integer sumWithoutDiscounts = 0;
+            Integer discountSum = 0;
+            Integer sumWithDiscount = 0;
 
             for (Sale sale : sales) {
                 sumWithoutDiscounts += sale.getPrice();
@@ -61,17 +61,17 @@ public class StatisticsServiceImpl implements StatisticsService {
                 sumWithDiscount += sale.getFinalPrice();
             }
 
-            statisticData.setSumWithoutDiscounts(Precision.round(sumWithoutDiscounts, 2));
+            statisticData.setSumWithoutDiscounts(sumWithoutDiscounts);
             statisticData.setAvgSumWithoutDiscounts(
                     statisticData.getCountReceipts() == 0
                             ? 0
-                            : Precision.round(sumWithoutDiscounts / statisticData.getCountReceipts() , 2));
-            statisticData.setDiscountSum(Precision.round(discountSum,2));
-            statisticData.setSumWithDiscount(Precision.round(sumWithDiscount,2));
+                            : sumWithoutDiscounts / statisticData.getCountReceipts());
+            statisticData.setDiscountSum(discountSum);
+            statisticData.setSumWithDiscount((sumWithDiscount));
             statisticData.setAvgSumWithDiscount(
                     (statisticData.getCountReceipts() == 0
                             ? 0
-                            : Precision.round(sumWithDiscount /statisticData.getCountReceipts(),2)));
+                            : sumWithDiscount /statisticData.getCountReceipts()));
 
             StringBuilder dateTimeCode = new StringBuilder(10);
             dateTimeCode
@@ -93,8 +93,8 @@ public class StatisticsServiceImpl implements StatisticsService {
                     .findByDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
             statisticData.setIncrease(
                     lastStatisticData != null
-                            ? Precision.round(statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount(), 2)
-                            : Precision.round(statisticData.getAvgSumWithDiscount(),2));
+                            ? statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount()
+                            : statisticData.getAvgSumWithDiscount());
 
 
             statisticData.setStarting(startDateTic);

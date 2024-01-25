@@ -9,34 +9,34 @@ drop table if exists sale_items cascade;
 CREATE TABLE IF NOT EXISTS items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    vendor_code BIGINT           NOT NULL UNIQUE,
-    name        VARCHAR(128)     NOT NULL,
-    price       double precision NOT NULL,
-    amount      BIGINT           NOT NULL
+    vendor_code BIGINT       NOT NULL UNIQUE,
+    name        VARCHAR(128) NOT NULL,
+    price       INT          NOT NULL,
+    amount      BIGINT       NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS cart_items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    vendor_code BIGINT           NOT NULL ,
-    item_id     BIGINT           NOT NULL REFERENCES items (id),
-    name        VARCHAR(128)     NOT NULL,
-    price       double precision NOT NULL,
-    amount      BIGINT           NOT NULL
+    vendor_code BIGINT       NOT NULL,
+    item_id     BIGINT       NOT NULL REFERENCES items (id),
+    name        VARCHAR(128) NOT NULL,
+    price       INT          NOT NULL,
+    amount      BIGINT       NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS sale_items
 (
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sale_code     BIGINT           NOT NULL,
-    vendor_code   BIGINT           NOT NULL ,
-    item_id       BIGINT           NOT NULL REFERENCES items (id),
-    name          VARCHAR(128)     NOT NULL,
-    price         double precision NOT NULL,
-    final_price   double precision NOT NULL,
-    total_price   double precision NOT NULL,
-    amount        BIGINT           NOT NULL,
-    discount      double precision NOT NULL,
+    sale_code     BIGINT       NOT NULL,
+    vendor_code   BIGINT       NOT NULL,
+    item_id       BIGINT       NOT NULL REFERENCES items (id),
+    name          VARCHAR(128) NOT NULL,
+    price         INT          NOT NULL,
+    final_price   INT          NOT NULL,
+    total_price   INT          NOT NULL,
+    amount        BIGINT       NOT NULL,
+    discount      INT          NOT NULL,
     discount_code BIGINT,
     created_on    TIMESTAMP DEFAULT NOW()
 );
@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS sale_items
 CREATE TABLE IF NOT EXISTS sales
 (
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sale_code     BIGINT           NOT NULL,
-    price         double precision NOT NULL,
-    final_price   double precision NOT NULL,
-    discount_sum  double precision NOT NULL,
+    sale_code     BIGINT NOT NULL,
+    price         INT    NOT NULL,
+    final_price   INT    NOT NULL,
+    discount_sum  INT    NOT NULL,
     discount_code BIGINT,
     created_on    TIMESTAMP DEFAULT NOW()
 );
@@ -70,11 +70,11 @@ CREATE TABLE IF NOT EXISTS statistics
     starting                  TIMESTAMP,
     ending                    TIMESTAMP,
     count_receipts            INT                                 NOT NULL,
-    sum_without_discounts     DOUBLE precision                    NOT NULL,
-    avg_sum_without_discounts DOUBLE precision                    NOT NULL,
-    discount_sum              DOUBLE precision                    NOT NULL,
-    sum_with_discounts        DOUBLE precision                    NOT NULL,
-    avg_sum_with_discounts    DOUBLE precision                    NOT NULL,
-    increase_receipts         DOUBLE precision                    NOT NULL,
+    sum_without_discounts     INT                                 NOT NULL,
+    avg_sum_without_discounts INT                                 NOT NULL,
+    discount_sum              INT                                 NOT NULL,
+    sum_with_discounts        INT                                 NOT NULL,
+    avg_sum_with_discounts    INT                                 NOT NULL,
+    increase_receipts         INT                                 NOT NULL,
     newest                    BOOLEAN
 );

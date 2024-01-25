@@ -15,7 +15,7 @@ public class ItemUpdateDto {
 
     private String name;
 
-    private Double price;
+    private Integer price;
 
     private Long amount;
 }

@@ -22,7 +22,7 @@ public class Item {
     @Column(name = "vendor_code")
     Long vendorCode;
     String name;
-    Double price;
+    Integer price;
     Long amount;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_id")

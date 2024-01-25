@@ -89,38 +89,40 @@ public class CartServiceImpl implements CartService {
         Collection<CartItem> cart = cartItemsRepository.findAll();
         saleCode++;
         Discount discount = discountRepository.findFirstByOrderByIdDesc();
-        Double coefficient = 1.0;
+        Integer coefficient;
 
         Sale sale = Sale.builder()
                 .salesCode(saleCode)
-                .price(0.)
-                .finalPrice(0.)
-                .discountSum(0.)
+                .price(0)
+                .finalPrice(0)
+                .discountSum(0)
                 .discountCode(0L)
                 .build();
 
         for (CartItem cartItem : cart) {
             SaleItem saleItem = new SaleItem();
             if (discount.getItemVendorCode() == cartItem.getVendorCode()) {
-                coefficient = (100 - discount.getCoefficient()) / 100;
+                coefficient = (100 - discount.getCoefficient());
                 saleItem.setDiscountCode(discount.getDiscountCode());
                 saleItem.setDiscount(coefficient);
-            } else {saleItem.setDiscountCode(0L);
-                saleItem.setDiscount(1);
-            };
+            } else {
+                saleItem.setDiscountCode(0L);
+                saleItem.setDiscount(100);
+                coefficient = 100;
+            }
             Item itemNewAmount = itemsRepository.findByVendorCode(cartItem.getVendorCode());
             saleItem.setVendorCode(cartItem.getVendorCode());
             saleItem.setSaleCode(saleCode);
             saleItem.setName(cartItem.getName());
-            saleItem.setPrice(cartItem.getPrice());
+            saleItem.setPrice(itemNewAmount.getPrice());
             saleItem.setAmount(cartItem.getAmount());
-            saleItem.setFinalPrice(cartItem.getPrice() * coefficient);
-            saleItem.setTotalPrice(cartItem.getPrice() * coefficient * cartItem.getAmount());
+            saleItem.setFinalPrice(itemNewAmount.getPrice() * coefficient / 100);
+            saleItem.setTotalPrice(saleItem.getFinalPrice() * cartItem.getAmount());
             saleItem.setCreatedOn(LocalDateTime.now());
             saleItem.setItemId(cartItem.getItemId()); //!
 
             sale.setPrice(sale.getPrice() + saleItem.getPrice() * cartItem.getAmount());
-            sale.setFinalPrice(sale.getFinalPrice() + cartItem.getPrice() * coefficient * cartItem.getAmount());
+            sale.setFinalPrice(sale.getFinalPrice() + saleItem.getTotalPrice());
             sale.setDiscountSum(sale.getDiscountSum() + sale.getPrice() - sale.getFinalPrice());
             sale.setDiscountCode(saleItem.getDiscountCode());
 

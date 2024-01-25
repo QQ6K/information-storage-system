@@ -13,7 +13,7 @@ public class ItemDto {
 
     private String name;
 
-    private Double price;
+    private Integer price;
 
     private Long amount;
 }
