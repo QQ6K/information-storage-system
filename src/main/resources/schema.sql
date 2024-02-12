@@ -5,6 +5,9 @@ drop table if exists cart_items cascade;
 drop table if exists sales cascade;
 drop table if exists discounts cascade;
 drop table if exists sale_items cascade;
+drop table if exists users cascade;
+drop table if exists roles cascade;
+drop table if exists users_roles cascade;
 
 CREATE TABLE IF NOT EXISTS items
 (
@@ -77,4 +80,28 @@ CREATE TABLE IF NOT EXISTS statistics
     avg_sum_with_discounts    INT                                 NOT NULL,
     increase_receipts         INT                                 NOT NULL,
     newest                    BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS users
+(
+    id       bigserial,
+    username varchar(30) not null unique,
+    password varchar(80) not null,
+    primary key (id)
+);
+
+CREATE TABLE IF NOT EXISTS roles
+(
+    id   serial,
+    name varchar(50) not null,
+    primary key (id)
+);
+
+CREATE TABLE IF NOT EXISTS users_roles
+(
+    user_id bigint not null,
+    role_id int    not null,
+    primary key (user_id, role_id),
+    foreign key (user_id) references users (id),
+    foreign key (role_id) references roles (id)
 );
