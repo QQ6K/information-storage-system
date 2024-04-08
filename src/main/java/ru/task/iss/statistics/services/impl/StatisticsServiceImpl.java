@@ -3,6 +3,7 @@ package ru.task.iss.statistics.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.util.Precision;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.SalesRepository;
@@ -28,6 +29,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public Collection<StatisticData> getStat(){
         Collection<StatisticData> statisticData= statisticsRepository.findAll();
         log.info("Стат");
@@ -36,6 +38,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
+    @Secured("ROLE_ADMIN")
     public void getRecalculate(){
         LocalDateTime startDate = salesRepository.getStartDate();
         LocalDateTime endDate = salesRepository.getEndDate();
@@ -104,6 +107,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Secured("ROLE_ADMIN")
     public Collection<StatisticData> getStatForItem() {
         return null;
     }
