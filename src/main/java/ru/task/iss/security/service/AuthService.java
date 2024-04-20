@@ -54,7 +54,6 @@ public class AuthService {
                 //.header(HttpHeaders.SET_COOKIE, "Bearer " + token.toString())
                 .header(HttpHeaders.SET_COOKIE, token)
                 .body(jsonAuth);
-
     }
 
 }

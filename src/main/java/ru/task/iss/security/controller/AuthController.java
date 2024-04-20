@@ -16,6 +16,7 @@ import ru.task.iss.security.service.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+
     @CrossOrigin("http://localhost:3000")
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) throws JsonProcessingException {

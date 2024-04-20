@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.common.PageDTO;
 import ru.task.iss.exceptions.BadRequestException;
@@ -24,6 +25,7 @@ public class ItemsController {
     private final ItemService itemService;
 
     @PostMapping
+    @Secured("ROLE_ADMIN")
     public ItemUpdateDto createItem(
             @RequestBody ItemDto itemDto
     ) {
@@ -31,6 +33,7 @@ public class ItemsController {
         return itemService.createItem(itemDto);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/{vendorCode}")
     public Item readItem(
             @PathVariable Long vendorCode
@@ -39,6 +42,7 @@ public class ItemsController {
     }
 
     @GetMapping
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     public PageDTO<Item> getItems(
             @RequestParam(defaultValue = "0", required = false) Integer from,
             @RequestParam(defaultValue = "10", required = false) Integer size,
@@ -57,6 +61,7 @@ public class ItemsController {
     }
 
     @PatchMapping("/{itemId}")
+    @Secured("ROLE_ADMIN")
     public ItemUpdateDto updateItem(
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto
@@ -65,6 +70,7 @@ public class ItemsController {
         return itemService.updateItem(itemId, itemDto);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{itemId}")
     public void deleteItem(
             @PathVariable Long itemId

@@ -2,12 +2,12 @@ package ru.task.iss.statistics.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.math3.util.Precision;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.task.iss.cart.repository.SaleItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.models.Sale;
+import ru.task.iss.models.SalesItemStatDto;
 import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.repositories.StatisticsRepository;
 import ru.task.iss.statistics.services.StatisticsService;
@@ -26,10 +26,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
 
+    private final SaleItemsRepository saleItemsRepository;
+
 
     @Override
     @Transactional
-    @Secured("ROLE_ADMIN")
     public Collection<StatisticData> getStat(){
         Collection<StatisticData> statisticData= statisticsRepository.findAll();
         log.info("Стат");
@@ -38,7 +39,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
-    @Secured("ROLE_ADMIN")
     public void getRecalculate(){
         LocalDateTime startDate = salesRepository.getStartDate();
         LocalDateTime endDate = salesRepository.getEndDate();
@@ -107,9 +107,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    @Secured("ROLE_ADMIN")
-    public Collection<StatisticData> getStatForItem() {
-        return null;
+    public SalesItemStatDto getStatForItem(Long vendorCode) {
+        SalesItemStatDto salesItemStat = new SalesItemStatDto();
+        salesItemStat.setTotalCountSales(saleItemsRepository.getSaleItemsCountByVendorCode(vendorCode));
+        salesItemStat.setTotalSum(saleItemsRepository.getSaleItemsTotalSumByVendorCode(vendorCode));
+        return salesItemStat;
     }
 
 

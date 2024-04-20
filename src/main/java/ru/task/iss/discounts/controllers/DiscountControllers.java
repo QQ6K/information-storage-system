@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,7 @@ public class DiscountControllers {
         return discountService.readHistory();
     }*/
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping
     public PageDTO<Discount> getHistory(
             @RequestParam(defaultValue = "0", required = false) Integer from,

@@ -31,14 +31,12 @@ public class ItemsServiceImpl implements ItemService {
     private final ItemsRepository itemsRepository;
 
     private final PageToPageDTOMapper<Item> pageToPageDTOMapper;
-    @Secured("ROLE_ADMIN")
     @Override
     @Transactional
     public ItemUpdateDto createItem(ItemDto itemDto){
         log.info("Создание товара");
         return ItemMapper.toUpdateDto(itemsRepository.save(ItemMapper.fromDto(itemDto)));
     }
-    @Secured("ROLE_USER")
     @Override
     public Item readItem(Long vendorCode){
         //return ItemMapper.toDto(findItemInRepository(vendorCode));
@@ -52,8 +50,6 @@ public class ItemsServiceImpl implements ItemService {
     }
 
     @Override
-   // @Secured("ROLE_USER")
-    //@PreAuthorize("hasRole('ADMIN')")
     public PageDTO<Item> getItemsPage(Pageable pageable){
         log.info("Получить страницу товаров");
         Page<Item> itemPage = itemsRepository.findAll(pageable);
@@ -63,7 +59,6 @@ public class ItemsServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    @Secured("ROLE_ADMIN")
     public ItemUpdateDto updateItem(Long itemId, ItemDto itemDto){
         Item item = findItemInRepository(itemId);
         Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
@@ -74,7 +69,6 @@ public class ItemsServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    @Secured("ROLE_ADMIN")
     public void deleteItem(Long itemId){
         itemsRepository.delete(findItemInRepository(itemId));
     }

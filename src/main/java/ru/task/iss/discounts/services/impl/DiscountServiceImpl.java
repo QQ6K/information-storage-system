@@ -32,7 +32,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public PageDTO<Discount> getDiscountsPage(Pageable pageable) {
-        log.info("Получить страницу товаров");
+        log.info("Получить страницу скидок");
         Page<Discount> discountPage = discountRepository.findAll(pageable);
         return pageToPageDTOMapper.pageToPageDTO(discountPage);
     }

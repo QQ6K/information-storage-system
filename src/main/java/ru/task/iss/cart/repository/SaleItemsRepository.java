@@ -24,6 +24,12 @@ public interface SaleItemsRepository extends JpaRepository<SaleItem,Long> {
     @Query(value = "SELECT * FROM sale_items s WHERE s.created_on BETWEEN :startDate AND :endDate", nativeQuery = true)
     Collection<SaleItem> getSales(LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query(value = "SELECT * FROM sale_items s WHERE s.sale_code = :saleCode", nativeQuery = true)
-    Collection<Sale> getSalesByCode(int saleCode);
+    /*@Query(value = "SELECT * FROM sale_items s WHERE s.sale_code = :saleCode", nativeQuery = true)
+    Collection<Sale> getSalesByCode(int saleCode);*/
+
+    @Query(value = "SELECT COUNT(*) as total_count FROM sale_items s WHERE s.vendor_code = :vendorCode", nativeQuery = true)
+    int getSaleItemsCountByVendorCode(Long vendorCode);
+
+    @Query(value = "SELECT SUM(total_price) as total_price FROM sale_items s WHERE s.vendor_code = :vendorCode", nativeQuery = true)
+    Long getSaleItemsTotalSumByVendorCode(Long vendorCode);
 }
