@@ -11,11 +11,13 @@ import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.BadRequestException;
+import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.models.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -50,6 +52,7 @@ public class CartServiceImpl implements CartService {
         CartItem cartItemToSave = cartItemsRepository.findByVendorCode(cartItem.getVendorCode());
         Item itemFromRepository = itemsRepository.findByVendorCode(cartItem.getVendorCode());
         validateAmount(itemFromRepository.getAmount(), itemFromRepository.getAmount());
+        cartItem.setItemId(itemFromRepository.getId());
         if (Optional.ofNullable(cartItemToSave).isPresent()) {
             cartItemToSave.setAmount(cartItem.getAmount());
         } else cartItemToSave = cartItem;
@@ -101,7 +104,7 @@ public class CartServiceImpl implements CartService {
 
         for (CartItem cartItem : cart) {
             SaleItem saleItem = new SaleItem();
-            if (discount.getItemVendorCode() == cartItem.getVendorCode()) {
+            if (Objects.equals(discount.getItemVendorCode(), cartItem.getVendorCode())) {
                 coefficient = (100 - discount.getCoefficient());
                 saleItem.setDiscountCode(discount.getDiscountCode());
                 saleItem.setDiscount(coefficient);
@@ -111,6 +114,11 @@ public class CartServiceImpl implements CartService {
                 coefficient = 100;
             }
             Item itemNewAmount = itemsRepository.findByVendorCode(cartItem.getVendorCode());
+
+            if (cartItem.getAmount() > itemNewAmount.getAmount())
+                throw new CrudException("Товар: " + itemNewAmount.getName() + ". На складе: " + itemNewAmount.getAmount()
+                + " шт. Невозможно купить: " + cartItem.getAmount() + " шт.");
+
             saleItem.setVendorCode(cartItem.getVendorCode());
             saleItem.setSaleCode(saleCode);
             saleItem.setName(cartItem.getName());
@@ -119,7 +127,7 @@ public class CartServiceImpl implements CartService {
             saleItem.setFinalPrice(itemNewAmount.getPrice() * coefficient / 100);
             saleItem.setTotalPrice(saleItem.getFinalPrice() * cartItem.getAmount());
             saleItem.setCreatedOn(LocalDateTime.now());
-            saleItem.setItemId(cartItem.getItemId()); //!
+            saleItem.setItemId(cartItem.getItemId());
 
             sale.setPrice(sale.getPrice() + saleItem.getPrice() * cartItem.getAmount());
             sale.setFinalPrice(sale.getFinalPrice() + saleItem.getTotalPrice());

@@ -20,7 +20,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> notAvailableException(CrudException e) {
         Map map = new HashMap();
-        map.put("Ошибка:", e.getMessage());
+        map.put("error", e.getMessage());
         return map;
 }
 }
