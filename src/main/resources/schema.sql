@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS statistics
     newest                    BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS users
+/*CREATE TABLE IF NOT EXISTS users
 (
     id       bigserial,
     username varchar(30) not null unique,
@@ -104,4 +104,4 @@ CREATE TABLE IF NOT EXISTS users_roles
     primary key (user_id, role_id),
     foreign key (user_id) references users (id),
     foreign key (role_id) references roles (id)
-);
+);*/

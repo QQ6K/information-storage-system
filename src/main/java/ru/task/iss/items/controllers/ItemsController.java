@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.common.PageDTO;
 import ru.task.iss.exceptions.BadRequestException;
@@ -12,9 +11,6 @@ import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemUpdateDto;
 import ru.task.iss.models.Item;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/items")
@@ -25,7 +21,6 @@ public class ItemsController {
     private final ItemService itemService;
 
     @PostMapping
-    @Secured("ROLE_ADMIN")
     public ItemUpdateDto createItem(
             @RequestBody ItemDto itemDto
     ) {
@@ -33,7 +28,6 @@ public class ItemsController {
         return itemService.createItem(itemDto);
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/{vendorCode}")
     public Item readItem(
             @PathVariable Long vendorCode
@@ -42,18 +36,19 @@ public class ItemsController {
     }
 
     @GetMapping
-    @Secured({"ROLE_ADMIN","ROLE_USER"})
     public PageDTO<Item> getItems(
             @RequestParam(defaultValue = "0", required = false) Integer from,
             @RequestParam(defaultValue = "10", required = false) Integer size,
-            @RequestParam(required = false) Integer page, HttpServletRequest request) {
+            @RequestParam(required = false) Integer page) {
         Pageable pageable;
         if (size == null) {
             pageable = Pageable.unpaged();
         } else if (size <= 0) {
             throw new BadRequestException("Ошибка параметров пагинации");
         } else {
-            if (page == null) {page =  from / size;};
+            if (page == null) {
+                page = from / size;
+            }
             pageable = PageRequest.of(page, size);
         }
         log.info("Запрос GET /items?size={}&page={}", size, page);
@@ -61,7 +56,6 @@ public class ItemsController {
     }
 
     @PatchMapping("/{itemId}")
-    @Secured("ROLE_ADMIN")
     public ItemUpdateDto updateItem(
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto
@@ -70,14 +64,12 @@ public class ItemsController {
         return itemService.updateItem(itemId, itemDto);
     }
 
-    @Secured("ROLE_ADMIN")
     @DeleteMapping("/{itemId}")
     public void deleteItem(
             @PathVariable Long itemId
     ) {
         itemService.deleteItem(itemId);
     }
-
 
 
 }

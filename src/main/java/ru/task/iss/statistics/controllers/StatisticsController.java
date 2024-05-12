@@ -2,17 +2,14 @@ package ru.task.iss.statistics.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
-import ru.task.iss.exceptions.BadRequestException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.task.iss.models.SalesItemStatDto;
 import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.services.StatisticsService;
-import ru.task.iss.statistics.services.impl.StatisticsServiceImpl;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
 
@@ -24,26 +21,20 @@ public class StatisticsController {
 
     private final StatisticsService statisticsService;
 
-    @Secured("ROLE_ADMIN")
     @GetMapping("/{vendorCode}")
-    public SalesItemStatDto getStatItem(@PathVariable Long vendorCode
-    ) {
+    public SalesItemStatDto getStatItem(@PathVariable Long vendorCode) {
         log.info("Запрос GET статистика /{}", vendorCode);
         return statisticsService.getStatForItem(vendorCode);
     }
 
     @GetMapping
-    @Secured("ROLE_ADMIN")
-    public Collection<StatisticData> getStat(
-    ) {
+    public Collection<StatisticData> getStat() {
         log.info("Запрос GET статистика /stat");
         return statisticsService.getStat();
     }
 
     @GetMapping("/calculate")
-    @Secured("ROLE_ADMIN")
-    public void getRecalculate(
-    ) {
+    public void getRecalculate() {
         log.info("Запрос GET пересчет /calculate");
         statisticsService.getRecalculate();
     }
@@ -56,9 +47,7 @@ public class StatisticsController {
     }*/
 
     @GetMapping("/between")
-    @Secured("ROLE_ADMIN")
-    public void getStatForDuration(
-    ) {
+    public void getStatForDuration() {
         log.info("Запрос GET на получение товаров из корзины /cart");
         //return cartService.getItemsFromCart();
     }
