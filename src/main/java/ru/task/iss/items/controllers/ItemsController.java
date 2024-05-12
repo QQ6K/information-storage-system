@@ -64,11 +64,11 @@ public class ItemsController {
         return itemService.updateItem(itemId, itemDto);
     }
 
-    @DeleteMapping("/{itemId}")
+    @DeleteMapping("/{vendorId}")
     public void deleteItem(
-            @PathVariable Long itemId
+            @PathVariable Long vendorId
     ) {
-        itemService.deleteItem(itemId);
+        itemService.deleteItem(vendorId);
     }
 
 

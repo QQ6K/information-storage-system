@@ -1,7 +1,6 @@
 drop table if exists items cascade;
 drop table if exists statistics cascade;
 drop table if exists cart_items cascade;
-drop table if exists cart_items cascade;
 drop table if exists sales cascade;
 drop table if exists discounts cascade;
 drop table if exists sale_items cascade;
@@ -22,7 +21,7 @@ CREATE TABLE IF NOT EXISTS cart_items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT       NOT NULL,
-    item_id     BIGINT       NOT NULL REFERENCES items (id),
+    item_id     BIGINT       NOT NULL,
     name        VARCHAR(128) NOT NULL,
     price       INT          NOT NULL,
     amount      BIGINT       NOT NULL
