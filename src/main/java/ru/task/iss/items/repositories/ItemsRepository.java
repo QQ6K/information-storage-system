@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
 
+import java.util.Optional;
+
 @Repository
 public interface ItemsRepository extends JpaRepository<Item,Long> {
     @Query(value = "SELECT ID FROM ITEMS ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
@@ -18,7 +20,7 @@ public interface ItemsRepository extends JpaRepository<Item,Long> {
 
     Page<Item> findAll( Pageable pageable);
 
-    Item findByVendorCode(Long vendorCore);
+    Optional<Item> findByVendorCode(Long vendorCore);
 
     @Query(value = "select vendor_code from ITEMS order by RANDOM() LIMIT 1", nativeQuery = true)
     public Long getRandomVendorCode();

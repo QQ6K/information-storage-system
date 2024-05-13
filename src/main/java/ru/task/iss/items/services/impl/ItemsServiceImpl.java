@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+//import ru.task.iss.cart.service.CartService;
 import ru.task.iss.common.PageDTO;
 import ru.task.iss.common.PageToPageDTOMapper;
+import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
 public class ItemsServiceImpl implements ItemService {
 
     private final ItemsRepository itemsRepository;
+
+    //private final CartService cartService;
 
     private final PageToPageDTOMapper<Item> pageToPageDTOMapper;
 
@@ -69,13 +73,16 @@ public class ItemsServiceImpl implements ItemService {
     @Override
     @Transactional
     public void deleteItem(Long vendorId) {
+        Item item = findItemInRepository(vendorId);
+        //cartService.removeItemFromCart(vendorId);
         itemsRepository.delete(findItemInRepository(vendorId));
     }
 
     @Override
     public Item findItemInRepository(Long vendorCode) {
-        return itemsRepository.findByVendorCode(vendorCode);
-        // .orElseThrow(() -> new CrudException("Cannot find Item with id = " + itemId));
+        Item item = itemsRepository.findByVendorCode(vendorCode)
+                .orElseThrow(() -> new CrudException("Не удалось найти товар c артикулом = " + vendorCode));
+        return item;
     }
 
 }

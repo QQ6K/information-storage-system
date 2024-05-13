@@ -8,6 +8,7 @@ import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemUpdateDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemService {
     ItemUpdateDto createItem(ItemDto itemDto);
@@ -24,5 +25,5 @@ public interface ItemService {
     @Transactional
     void deleteItem(Long itemId);
 
-    Item findItemInRepository(Long itemId);
+    Item findItemInRepository(Long vendorCode);
 }

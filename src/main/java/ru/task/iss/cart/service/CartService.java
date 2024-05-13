@@ -7,6 +7,10 @@ import ru.task.iss.models.CartItem;
 import java.util.Collection;
 
 public interface CartService {
+    CartItem findItemInCart(Long vendorCode);
+
+    CartItem checkItemInCart(Long vendorCode);
+
     @Transactional
     CartItem addItemToCart(CartItem cartItem);
 

@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS sale_items
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     sale_code     BIGINT       NOT NULL,
     vendor_code   BIGINT       NOT NULL,
-    item_id       BIGINT       NOT NULL REFERENCES items (id),
+    item_id       BIGINT       NOT NULL,
     name          VARCHAR(128) NOT NULL,
     price         INT          NOT NULL,
     final_price   INT          NOT NULL,
