@@ -11,15 +11,24 @@
 	<groupId>ru.task</groupId>
 	<artifactId>MISS</artifactId>
 	<version>1.0.0</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<name>my-information-storage-system</name>
 	<description>Система хранения информации о продажах</description>
-	<properties>
+    <modules>
+        <module>server</module>
+		<!--module>miss-front/front</module-->
+	</modules>
+    <properties>
 		<java.version>11</java.version>
 		<junit-jupiter.version>5.5.2</junit-jupiter.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.0.Final</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

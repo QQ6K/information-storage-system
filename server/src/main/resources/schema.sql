@@ -104,4 +104,3 @@ CREATE TABLE IF NOT EXISTS users_roles
     foreign key (user_id) references users (id),
     foreign key (role_id) references roles (id)
 );*/
-*/
