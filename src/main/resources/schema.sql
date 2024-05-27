@@ -1,6 +1,5 @@
-drop table if exists items cascade;
+/*drop table if exists items cascade;
 drop table if exists statistics cascade;
-drop table if exists cart_items cascade;
 drop table if exists cart_items cascade;
 drop table if exists sales cascade;
 drop table if exists discounts cascade;
@@ -22,7 +21,7 @@ CREATE TABLE IF NOT EXISTS cart_items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT       NOT NULL,
-    item_id     BIGINT       NOT NULL REFERENCES items (id),
+    item_id     BIGINT       NOT NULL,
     name        VARCHAR(128) NOT NULL,
     price       INT          NOT NULL,
     amount      BIGINT       NOT NULL
@@ -33,7 +32,7 @@ CREATE TABLE IF NOT EXISTS sale_items
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     sale_code     BIGINT       NOT NULL,
     vendor_code   BIGINT       NOT NULL,
-    item_id       BIGINT       NOT NULL REFERENCES items (id),
+    item_id       BIGINT       NOT NULL,
     name          VARCHAR(128) NOT NULL,
     price         INT          NOT NULL,
     final_price   INT          NOT NULL,
@@ -82,7 +81,7 @@ CREATE TABLE IF NOT EXISTS statistics
     newest                    BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS users
+/*CREATE TABLE IF NOT EXISTS users
 (
     id       bigserial,
     username varchar(30) not null unique,
@@ -104,4 +103,5 @@ CREATE TABLE IF NOT EXISTS users_roles
     primary key (user_id, role_id),
     foreign key (user_id) references users (id),
     foreign key (role_id) references roles (id)
-);
+);*/
+*/
