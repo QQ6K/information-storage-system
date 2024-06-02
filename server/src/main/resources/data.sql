@@ -1,4 +1,4 @@
-/*insert INTO ITEMS (id,  vendor_code, name, price, amount)
+insert INTO ITEMS (id,  vendor_code, name, price, amount)
 values (default, 101, 'Дрель кондитерская', 5520, 5);
 insert INTO ITEMS (id, vendor_code, name, price, amount)
 values (default, 102, 'Морская кладь', 16015, 0);
@@ -21,7 +21,7 @@ values (default, 110, 'Аспирин для котов', 25, 20);
 insert INTO ITEMS (id, vendor_code, name, price, amount)
 values (default, 111, 'Телеграмма Дмитрию Киселеву', 25, 1);
 insert INTO ITEMS (id, vendor_code, name, price, amount)
-values (default, 112, 'Сережки для жены', 10050000, 11);*/
+values (default, 112, 'Сережки для жены', 10050000, 11);
 
 
 /*insert into roles (name)

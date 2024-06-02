@@ -151,8 +151,8 @@ public class CartServiceImpl implements CartService {
                 saleItem.setItemId(cartItem.getItemId());
 
                 sale.setPrice(sale.getPrice() + saleItem.getPrice() * cartItem.getAmount());
-                sale.setFinalPrice(sale.getFinalPrice() + saleItem.getTotalPrice());
-                sale.setDiscountSum(sale.getDiscountSum() + sale.getPrice() - sale.getFinalPrice());
+                sale.setFinalPrice( sale.getFinalPrice() + saleItem.getTotalPrice());
+                sale.setDiscountSum(sale.getPrice() - sale.getFinalPrice());
                 sale.setDiscountCode(saleItem.getDiscountCode());
 
                 saleItemsRepository.save(saleItem);

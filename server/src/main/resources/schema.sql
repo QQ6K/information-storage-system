@@ -1,4 +1,4 @@
-/*drop table if exists items cascade;
+drop table if exists items cascade;
 drop table if exists statistics cascade;
 drop table if exists cart_items cascade;
 drop table if exists sales cascade;
