@@ -12,7 +12,7 @@ services:
 
   server:
     build: server
-    image: server
+    image: qq6k/wms-server:1.0
     container_name: server
     ports:
       - "8080:8080"
@@ -26,6 +26,9 @@ services:
 
   client:
     build: miss-front
-    container_name: client_frontend
+    image: qq6k/wms-frontend:1.0
+    container_name: miss-front
     ports:
       - '3000:3000'
+    stdin_open: true
+    tty: true

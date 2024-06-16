@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.SaleItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
+import ru.task.iss.common.DateTimeFormatterCustom;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.models.Sale;
 import ru.task.iss.models.SalesItemStatDto;
@@ -32,7 +33,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final SaleItemsRepository saleItemsRepository;
 
-    @Scheduled(fixedDelay = 600000)
+    @Scheduled(fixedDelay = 3600000)
     @Override
     @Transactional
     public void makeStat() {
@@ -55,7 +56,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     public void getRecalculate() {
         LocalDateTime startDate = salesRepository.getStartDate();
         LocalDateTime endDate = salesRepository.getEndDate();
-        if (startDate != null || endDate != null) {
+        if (endDate != null) {
             Duration duration = Duration.between(startDate, endDate);
             long timeIntervalCount = (duration.toHours());
             log.info("timeIntervalCount {}", timeIntervalCount);
@@ -63,60 +64,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             for (int tic = 0; tic <= timeIntervalCount; tic++) {
                 LocalDateTime startDateTic = startDate.plusHours(tic);
                 LocalDateTime endDateTic = startDate.plusHours(tic + 1);
-                Collection<Sale> sales = salesRepository.getSales(startDateTic, endDateTic);
-
-                StatisticData statisticData = new StatisticData();
-                statisticData.setCountReceipts((long) sales.size());
-
-                Long sumWithoutDiscounts = 0L;
-                Long discountSum = 0L;
-                Long sumWithDiscount = 0L;
-
-                for (Sale sale : sales) {
-                    sumWithoutDiscounts += sale.getPrice();
-                    discountSum += sale.getDiscountSum();
-                    sumWithDiscount += sale.getFinalPrice();
-                }
-
-                statisticData.setSumWithoutDiscounts(sumWithoutDiscounts);
-                statisticData.setAvgSumWithoutDiscounts(
-                        statisticData.getCountReceipts() == 0
-                                ? 0
-                                : sumWithoutDiscounts / statisticData.getCountReceipts());
-                statisticData.setDiscountSum(discountSum);
-                statisticData.setSumWithDiscount((sumWithDiscount));
-                statisticData.setAvgSumWithDiscount(
-                        (statisticData.getCountReceipts() == 0
-                                ? 0
-                                : sumWithDiscount / statisticData.getCountReceipts()));
-
-                StringBuilder dateTimeCode = new StringBuilder(10);
-                dateTimeCode
-                        .append(endDateTic.getYear())
-                        .append(endDateTic.getMonthValue() < 10 ? "0" + endDateTic.getMonthValue() : endDateTic.getMonth())
-                        .append(endDateTic.getDayOfMonth() < 10 ? "0" + endDateTic.getDayOfMonth() : endDateTic.getDayOfMonth())
-                        .append(endDateTic.getHour() < 10 ? "0" + endDateTic.getHour() : endDateTic.getHour());
-
-                statisticData.setDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
-
-                dateTimeCode.delete(0, dateTimeCode.length());
-                dateTimeCode
-                        .append(startDateTic.getYear())
-                        .append(startDateTic.getMonthValue() < 10 ? "0" + startDateTic.getMonthValue() : startDateTic.getMonthValue())
-                        .append(startDateTic.getDayOfMonth() < 10 ? "0" + startDateTic.getDayOfMonth() : startDateTic.getDayOfMonth())
-                        .append(startDateTic.getHour() < 10 ? "0" + startDateTic.getHour() : startDateTic.getHour());
-
-                StatisticData lastStatisticData = statisticsRepository
-                        .findByDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
-                statisticData.setIncrease(
-                        lastStatisticData != null
-                                ? statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount()
-                                : statisticData.getAvgSumWithDiscount());
-
-
-                statisticData.setStarting(startDateTic);
-                statisticData.setEnding(endDateTic);
-                statisticsRepository.save(statisticData);
+                statCalc(endDateTic,startDateTic);
             }
         } else throw new CrudException("Нет продаж. Невозможно посчитать статистику");
     }
@@ -169,7 +117,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         statisticData.setDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
 
-        dateTimeCode.delete(0, dateTimeCode.length());
+        dateTimeCode.delete(0, dateTimeCode.length()); //очистить
+
         dateTimeCode
                 .append(startDateTic.getYear())
                 .append(startDateTic.getMonthValue() < 10 ? "0" + startDateTic.getMonthValue() : startDateTic.getMonthValue())
@@ -183,9 +132,8 @@ public class StatisticsServiceImpl implements StatisticsService {
                         ? statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount()
                         : statisticData.getAvgSumWithDiscount());
 
-
-        statisticData.setStarting(startDateTic);
-        statisticData.setEnding(endDateTic);
+        statisticData.setStarting(DateTimeFormatterCustom.formatLocalDateTime(startDateTic));
+        statisticData.setEnding(DateTimeFormatterCustom.formatLocalDateTime(endDateTic));
         statisticsRepository.save(statisticData);
     }
 

@@ -1,4 +1,4 @@
-/*drop table if exists items cascade;
+drop table if exists items cascade;
 drop table if exists statistics cascade;
 drop table if exists cart_items cascade;
 drop table if exists sales cascade;
@@ -13,15 +13,15 @@ CREATE TABLE IF NOT EXISTS items
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT       NOT NULL UNIQUE,
     name        VARCHAR(128) NOT NULL,
-    price       INT          NOT NULL,
-    amount      BIGINT       NOT NULL
+    price       INT          NOT NULL CHECK (price >= 0),
+    amount      BIGINT       NOT NULL CHECK (amount >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS cart_items
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT       NOT NULL,
-    item_id     BIGINT       NOT NULL,
+    item_id     BIGINT       NOT NULL REFERENCES items (id) ON DELETE CASCADE,
     name        VARCHAR(128) NOT NULL,
     price       INT          NOT NULL,
     amount      BIGINT       NOT NULL
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS sale_items
 (
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     sale_code     BIGINT       NOT NULL,
-    vendor_code   BIGINT       NOT NULL,
+    vendor_code   BIGINT       NOT NULL REFERENCES items (vendor_code) ON DELETE SET NULL,
     item_id       BIGINT       NOT NULL,
     name          VARCHAR(128) NOT NULL,
     price         INT          NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS sale_items
     amount        BIGINT       NOT NULL,
     discount      INT          NOT NULL,
     discount_code BIGINT,
-    created_on    TIMESTAMP DEFAULT NOW()
+    created_on    VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS sales
@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS statistics
 (
     id                        BIGINT GENERATED ALWAYS AS IDENTITY NOT NULL PRIMARY KEY,
     datetime_code             BIGINT                              NOT NULL,
-    starting                  TIMESTAMP,
-    ending                    TIMESTAMP,
+    starting                  VARCHAR(32),
+    ending                    VARCHAR(32),
     count_receipts            INT                                 NOT NULL,
     sum_without_discounts     INT                                 NOT NULL,
     avg_sum_without_discounts INT                                 NOT NULL,

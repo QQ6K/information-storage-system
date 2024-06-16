@@ -1,5 +1,8 @@
 package ru.task.iss.cart.repository;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -32,4 +35,6 @@ public interface SaleItemsRepository extends JpaRepository<SaleItem,Long> {
 
     @Query(value = "SELECT SUM(total_price) as total_price FROM sale_items s WHERE s.vendor_code = :vendorCode", nativeQuery = true)
     Long getSaleItemsTotalSumByVendorCode(Long vendorCode);
+
+    Page<SaleItem> findByVendorCode(Long vendorCode, Pageable pageable);
 }

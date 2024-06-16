@@ -13,6 +13,7 @@ import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
 //import ru.task.iss.sales.services.SalesService;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,11 +30,13 @@ public class DiscountSchedulerService {
     private final DiscountRepository discountRepository;
     private final ItemsRepository itemsRepository;
 
-    private static final String cron = "0 * * * * *";
+   // private static final String cron = "0 * * * * *";
     //private static final String cron = "0 0 * * * *";
 
    // @Scheduled(cron = cron)
-   @Scheduled(fixedDelay = 600000)
+   //@Scheduled(fixedDelay = 600000)
+   @Scheduled(fixedDelayString = "${miss.scheduling.delay}")
+   @PostConstruct
    @Transactional
     public void scheduleDiscount() {
        Item item = getRandomItem();
@@ -45,9 +48,10 @@ public class DiscountSchedulerService {
         discount.setName(item.getName());
         discount.setStarting(LocalDateTime.now());
         discount.setEnding(discount.getStarting().plusMinutes(1));
+        discount.setDiscountCode(0L);
         discountRepository.save(discount);
         discount = discountRepository.findFirstByOrderByIdDesc();
-        discount.setDiscountCode(discount.getId());
+        discount.setDiscountCode(discount.getId()+10000000);
         discountRepository.save(discount);
         log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {} {}, % скидки будет {}," +
                         " будет длиться с {} до {}",
