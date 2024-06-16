@@ -25,11 +25,6 @@ public class DiscountServiceImpl implements DiscountService {
 
     private final PageToPageDTOMapper<Discount> pageToPageDTOMapper;
 
-   /* @Override
-    public List<Discount> readHistory(){
-        return discountRepository.findAll();
-    }*/
-
     @Override
     public PageDTO<Discount> getDiscountsPage(Pageable pageable) {
         log.info("Получить страницу скидок");
