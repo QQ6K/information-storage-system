@@ -18,8 +18,8 @@ public class StatisticData {
     private Long id;
     @Column(name = "datetime_code")
     private int dateTimeCode; //дата+час для статистики и получения
-    private LocalDateTime starting;
-    private LocalDateTime ending;
+    private String starting;
+    private String ending;
     @Column(name = "count_receipts")
     private Long countReceipts; // количество чеков
     @Column(name = "sum_without_discounts")
@@ -34,7 +34,6 @@ public class StatisticData {
     private Long avgSumWithDiscount; //стоимость среднего чека с учетом скидок
     @Column(name = "increase_receipts")
     private Long increase; // прирост среднего чека к предыдущему часу
-
     @Column(name = "newest")
     private Boolean newest;
 }

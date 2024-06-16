@@ -32,5 +32,5 @@ public class SaleItem{
     private Long discountCode;
     private Long finalPrice;
     private Long totalPrice;
-    private LocalDateTime createdOn;
+    private String createdOn;
 }
