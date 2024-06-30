@@ -23,7 +23,7 @@ public class Discount {
     @Column(name = "item_vendor_code")
     private Long itemVendorCode;
     private String name;
-    private LocalDateTime starting;
-    private LocalDateTime ending;
+    private String starting;
+    private String ending;
 
 }

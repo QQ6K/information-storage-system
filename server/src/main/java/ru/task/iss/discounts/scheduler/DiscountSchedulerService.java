@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.task.iss.common.DateTimeFormatterCustom;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
@@ -41,13 +42,14 @@ public class DiscountSchedulerService {
     public void scheduleDiscount() {
        Item item = getRandomItem();
         Discount discount = new Discount();
-        discount.setCoefficient(
+         discount.setCoefficient(
                 (ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
         );
         discount.setItemVendorCode(item.getVendorCode());
         discount.setName(item.getName());
-        discount.setStarting(LocalDateTime.now());
-        discount.setEnding(discount.getStarting().plusMinutes(1));
+        LocalDateTime start = LocalDateTime.now();
+        discount.setStarting(DateTimeFormatterCustom.formatLocalDateTime(start));
+        discount.setEnding(DateTimeFormatterCustom.formatLocalDateTime(start.plusMinutes(1)));
         discount.setDiscountCode(0L);
         discountRepository.save(discount);
         discount = discountRepository.findFirstByOrderByIdDesc();

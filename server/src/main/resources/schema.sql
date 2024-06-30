@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS sale_items
     amount        BIGINT       NOT NULL,
     discount      INT          NOT NULL,
     discount_code BIGINT,
-    created_on    VARCHAR(20)
+    created_on    VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS sales
@@ -60,9 +60,9 @@ CREATE TABLE IF NOT EXISTS discounts
     discount_code    BIGINT,
     name             VARCHAR(128)                        NOT NULL,
     coefficient      DOUBLE precision                    NOT NULL,
-    item_vendor_code BIGINT                              NOT null,
-    starting         TIMESTAMP                           not null,
-    ending           TIMESTAMP                           not null
+    item_vendor_code BIGINT                              NOT NULL,
+    starting         VARCHAR(32),
+    ending           VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS statistics
