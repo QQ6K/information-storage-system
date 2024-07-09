@@ -116,8 +116,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .append(endDateTic.getHour() < 10 ? "0" + endDateTic.getHour() : endDateTic.getHour());
 
         statisticData.setDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
-
-        dateTimeCode.delete(0, dateTimeCode.length()); //очистить
+        dateTimeCode.delete(0, dateTimeCode.length());
 
         dateTimeCode
                 .append(startDateTic.getYear())

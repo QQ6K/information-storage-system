@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.cart.service.CartService;
+import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.models.CartItem;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
-    public CartItem addItemToCart(
+    public ItemDto addItemToCart(
             @RequestBody CartItem cartItem
     ) {
         log.info("Запрос POST на добавление товара /cart");
@@ -25,7 +26,7 @@ public class CartController {
     }
 
     @GetMapping
-    public Collection<CartItem> getItemsFromCart(
+    public Collection<ItemDto> getItemsFromCart(
     ) {
         log.info("Запрос GET на получение товаров из корзины /cart");
         return cartService.getItemsFromCart();

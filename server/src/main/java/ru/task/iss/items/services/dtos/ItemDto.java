@@ -19,7 +19,15 @@ public class ItemDto {
     private Long vendorCode;
     private String name;
     @Min(value = 0L, message = "Цена не может быть отрицательной")
-    private Long price;
+    private Double price;
     @Min(value = 0L, message = "Количество не может быть отрицательным")
     private Long amount;
+
+    public ItemDto(Long vendorCode, String name, Long price, Long amount) {
+        this.name = name;
+        this.amount = amount;
+        this.vendorCode = vendorCode;
+        this.price = Double.valueOf(price);
+
+        }
 }

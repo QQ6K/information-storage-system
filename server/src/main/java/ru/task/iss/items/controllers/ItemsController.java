@@ -4,14 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.common.PageDTO;
-import ru.task.iss.exceptions.BadRequestException;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
-import ru.task.iss.items.services.dtos.ItemUpdateDto;
 import ru.task.iss.models.Item;
 
 import javax.validation.Valid;
@@ -25,7 +22,7 @@ public class ItemsController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemUpdateDto createItem(
+    public ItemDto createItem(
             @Valid @RequestBody ItemDto itemDto
     ) {
         log.info("Запрос POST на создание товара /items");
@@ -60,7 +57,7 @@ public class ItemsController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemUpdateDto updateItem(
+    public ItemDto updateItem(
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto
     ) {

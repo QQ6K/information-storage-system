@@ -15,12 +15,15 @@ import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.items.services.ItemService;
+import ru.task.iss.items.services.dtos.ItemDto;
+import ru.task.iss.items.services.dtos.ItemMapper;
 import ru.task.iss.models.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -71,7 +74,7 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public CartItem addItemToCart(CartItem cartItem) {
+    public ItemDto addItemToCart(CartItem cartItem) {
         CartItem cartItemToSave = findItemInCart(cartItem.getVendorCode());
         Item itemFromRepository = itemService.findItemInRepository(cartItem.getVendorCode());
         validateAmount(itemFromRepository.getAmount(), cartItem.getAmount());
@@ -80,7 +83,7 @@ public class CartServiceImpl implements CartService {
             cartItemToSave.setAmount(cartItem.getAmount());
         } else cartItemToSave = cartItem;
         log.info("Добавление товара в корзину {} ", cartItemToSave.getName());
-        return cartItemsRepository.save(cartItemToSave);
+        return ItemMapper.toItemDtoFromCartItem(cartItemsRepository.save(cartItemToSave));
     }
 
     @Transactional
@@ -92,9 +95,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Collection<CartItem> getItemsFromCart() {
+    public Collection<ItemDto> getItemsFromCart() {
         log.info("Получение товаров из корзины");
-        return cartItemsRepository.findAll();
+        Collection<CartItem> cartItems = cartItemsRepository.findAll();
+        Collection<ItemDto> response = cartItems.stream().map(ItemMapper::toItemDtoFromCartItem).collect(Collectors.toList());
+        return response;
     }
 
     @Transactional
@@ -108,7 +113,6 @@ public class CartServiceImpl implements CartService {
     @Override
     public void buyCart() {
         try {
-
 
             Long saleCode = saleItemsRepository.findMaximum();
             log.info("поковырялись в репозитории нашли КОД {}", saleCode);

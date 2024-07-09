@@ -3,7 +3,7 @@ package ru.task.iss.cart.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import ru.task.iss.cart.service.dtos.CartItemDto;
+import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.models.CartItem;
 import ru.task.iss.models.SaleItem;
 
@@ -17,12 +17,12 @@ public interface CartService {
     CartItem checkItemInCart(Long vendorCode);
 
     @Transactional
-    CartItem addItemToCart(CartItem cartItem);
+    ItemDto addItemToCart(CartItem cartItem);
 
     @Transactional
     void removeItemFromCart(Long vendorCode);
 
-    Collection<CartItem> getItemsFromCart();
+    Collection<ItemDto> getItemsFromCart();
 
     @Transactional
     void cleanCart();

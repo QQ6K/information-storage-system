@@ -21,7 +21,7 @@ public class ItemUpdateDto {
     private String name;
 
     @Min(value = 0L, message = "Цена не может быть отрицательной")
-    private Long price;
+    private double price;
 
     @Min(value = 0L, message = "Количество не может быть отрицательным")
     private Long amount;
