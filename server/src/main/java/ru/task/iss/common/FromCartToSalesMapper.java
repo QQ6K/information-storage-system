@@ -16,7 +16,7 @@ public class FromCartToSalesMapper {
         //sale.setDiscountCode();
         //sale.setFinalPrice();
         //sale.setTotalPrice();
-        saleItem.setCreatedOn(DateTimeFormatterCustom.formatLocalDateTime(LocalDateTime.now()));
+        saleItem.setCreatedOn(LocalDateTime.now());
         return saleItem;
     }
 }

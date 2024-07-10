@@ -3,6 +3,7 @@ package ru.task.iss.cart.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,12 @@ import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemMapper;
 import ru.task.iss.models.*;
+import ru.task.iss.statistics.services.dto.SaleItemDto;
+import ru.task.iss.statistics.services.dto.SaleItemMapper;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,8 +58,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Page<SaleItem> getSalesByVendorCode(Long vendorCode, Pageable pageable) {
-        return saleItemsRepository.findByVendorCode(vendorCode, pageable);
+    public Page<SaleItemDto> getSalesByVendorCode(Long vendorCode, Pageable pageable) {
+        Page<SaleItem> saleItemsPage= saleItemsRepository
+                .findByVendorCode(vendorCode, pageable);
+        List<SaleItemDto> saleItemDtos = saleItemsPage.getContent().stream()
+                .map(SaleItemMapper::toSaleItemDto)
+                .collect(Collectors.toList());
+        return new PageImpl<>(saleItemDtos, pageable, saleItemsPage.getTotalElements());
     }
 
     @Override
@@ -162,7 +171,7 @@ public class CartServiceImpl implements CartService {
                     saleItem.setFinalPrice(itemNewAmount.getPrice() * coefficient / 100);
                     long price = saleItem.getFinalPrice();
                     saleItem.setTotalPrice(price * cartItem.getAmount());
-                    saleItem.setCreatedOn(DateTimeFormatterCustom.formatLocalDateTime(LocalDateTime.now()));
+                    saleItem.setCreatedOn(LocalDateTime.now());
                     saleItem.setItemId(cartItem.getItemId());
 
                     sale.setPrice(sale.getPrice() + saleItem.getPrice() * cartItem.getAmount());

@@ -6,11 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.models.CartItem;
 import ru.task.iss.models.SaleItem;
+import ru.task.iss.statistics.services.dto.SaleItemDto;
 
 import java.util.Collection;
 
 public interface CartService {
-    Page<SaleItem> getSalesByVendorCode(Long vendorCode, Pageable pageable);
+    Page<SaleItemDto> getSalesByVendorCode(Long vendorCode, Pageable pageable);
 
     CartItem findItemInCart(Long vendorCode);
 

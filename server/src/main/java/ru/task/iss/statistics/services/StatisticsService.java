@@ -4,6 +4,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.models.SalesItemStatDto;
 import ru.task.iss.models.StatisticData;
+import ru.task.iss.statistics.services.dto.StatisticDataDto;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -14,12 +15,12 @@ public interface StatisticsService {
     void makeStat();
 
     @Transactional
-    Collection<StatisticData> getStat();
+    Collection<StatisticDataDto> getStat();
 
     void getRecalculate();
 
-    SalesItemStatDto getStatForItem(Long vendorCode);
 
+    SalesItemStatDto getStatForItem(Long vendorCode);
 
     void statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic);
 }

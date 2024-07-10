@@ -18,8 +18,8 @@ public class StatisticData {
     private Long id;
     @Column(name = "datetime_code")
     private int dateTimeCode; //дата+час для статистики и получения
-    private String starting;
-    private String ending;
+    private LocalDateTime starting;
+    private LocalDateTime ending;
     @Column(name = "count_receipts")
     private Long countReceipts; // количество чеков
     @Column(name = "sum_without_discounts")

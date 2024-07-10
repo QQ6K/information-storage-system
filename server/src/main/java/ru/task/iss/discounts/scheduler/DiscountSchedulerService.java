@@ -48,8 +48,8 @@ public class DiscountSchedulerService {
         discount.setItemVendorCode(item.getVendorCode());
         discount.setName(item.getName());
         LocalDateTime start = LocalDateTime.now();
-        discount.setStarting(DateTimeFormatterCustom.formatLocalDateTime(start));
-        discount.setEnding(DateTimeFormatterCustom.formatLocalDateTime(start.plusMinutes(1)));
+        discount.setStarting(start);
+        discount.setEnding(start.plusMinutes(1));
         discount.setDiscountCode(0L);
         discountRepository.save(discount);
         discount = discountRepository.findFirstByOrderByIdDesc();

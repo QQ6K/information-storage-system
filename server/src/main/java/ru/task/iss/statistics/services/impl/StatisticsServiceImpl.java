@@ -8,17 +8,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.cart.repository.SaleItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
-import ru.task.iss.common.DateTimeFormatterCustom;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.models.Sale;
 import ru.task.iss.models.SalesItemStatDto;
 import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.repositories.StatisticsRepository;
 import ru.task.iss.statistics.services.StatisticsService;
+import ru.task.iss.statistics.services.dto.StatisticDataDto;
+import ru.task.iss.statistics.services.dto.StatisticDataMapper;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,8 +48,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
-    public Collection<StatisticData> getStat() {
-        Collection<StatisticData> statisticData = statisticsRepository.findAll();
+    public Collection<StatisticDataDto> getStat() {
+        Collection<StatisticDataDto> statisticData = statisticsRepository
+                .findAll().stream()
+                .map(StatisticDataMapper::toStatisticDataDto)
+                .collect(Collectors.toCollection(ArrayList::new));
         log.info("Стат");
         return statisticData;
     }
@@ -56,6 +62,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     public void getRecalculate() {
         LocalDateTime startDate = salesRepository.getStartDate();
         LocalDateTime endDate = salesRepository.getEndDate();
+
         if (endDate != null) {
             Duration duration = Duration.between(startDate, endDate);
             long timeIntervalCount = (duration.toHours());
@@ -109,6 +116,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                         : sumWithDiscount / statisticData.getCountReceipts()));
 
         StringBuilder dateTimeCode = new StringBuilder(10);
+
         dateTimeCode
                 .append(endDateTic.getYear())
                 .append(endDateTic.getMonthValue() < 10 ? "0" + endDateTic.getMonthValue() : endDateTic.getMonth())
@@ -116,6 +124,11 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .append(endDateTic.getHour() < 10 ? "0" + endDateTic.getHour() : endDateTic.getHour());
 
         statisticData.setDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
+
+        StatisticData temp = statisticsRepository.findByDateTimeCode(statisticData.getDateTimeCode());
+        temp.setNewest(false);
+        statisticsRepository.save(temp);
+
         dateTimeCode.delete(0, dateTimeCode.length());
 
         dateTimeCode
@@ -126,13 +139,15 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         StatisticData lastStatisticData = statisticsRepository
                 .findByDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
+
         statisticData.setIncrease(
                 lastStatisticData != null
                         ? statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount()
                         : statisticData.getAvgSumWithDiscount());
 
-        statisticData.setStarting(DateTimeFormatterCustom.formatLocalDateTime(startDateTic));
-        statisticData.setEnding(DateTimeFormatterCustom.formatLocalDateTime(endDateTic));
+        statisticData.setStarting(startDateTic);
+        statisticData.setEnding(endDateTic);
+        statisticData.setNewest(true);
         statisticsRepository.save(statisticData);
     }
 

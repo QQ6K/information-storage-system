@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.task.iss.cart.service.CartService;
 import ru.task.iss.models.SaleItem;
-import ru.task.iss.models.SalesItemStatDto;
 import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.services.StatisticsService;
+import ru.task.iss.statistics.services.dto.SaleItemDto;
+import ru.task.iss.statistics.services.dto.StatisticDataDto;
 
 import java.util.Collection;
 
@@ -28,14 +29,14 @@ public class StatisticsController {
     private final CartService cartService;
 
     @GetMapping("/{vendorCode}")
-    public Page<SaleItem> getStatItem(@PathVariable Long vendorCode, Pageable pageable) {
+    public Page<SaleItemDto> getStatItem(@PathVariable Long vendorCode, Pageable pageable) {
         log.info("Запрос GET продажи товара  /{}", vendorCode);
          return cartService.getSalesByVendorCode(vendorCode, pageable);
          //statisticsService.getStatForItem(vendorCode);
     }
 
     @GetMapping
-    public Collection<StatisticData> getStat() {
+    public Collection<StatisticDataDto> getStat() {
         log.info("Запрос GET статистика /stat");
         return statisticsService.getStat();
     }
