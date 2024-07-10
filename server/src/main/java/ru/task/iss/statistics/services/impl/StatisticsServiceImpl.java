@@ -90,7 +90,24 @@ public class StatisticsServiceImpl implements StatisticsService {
 
         Collection<Sale> sales = salesRepository.getSales(startDateTic, endDateTic);
 
+
+
+        StringBuilder dateTimeCode = new StringBuilder(10);
+        dateTimeCode
+                .append(endDateTic.getYear())
+                .append(endDateTic.getMonthValue() < 10 ? "0" + endDateTic.getMonthValue() : endDateTic.getMonth())
+                .append(endDateTic.getDayOfMonth() < 10 ? "0" + endDateTic.getDayOfMonth() : endDateTic.getDayOfMonth())
+                .append(endDateTic.getHour() < 10 ? "0" + endDateTic.getHour() : endDateTic.getHour());
+        int dTc = Integer.parseInt(String.valueOf(dateTimeCode));
+        StatisticData temp = statisticsRepository.findByDateTimeCode(dTc);
         StatisticData statisticData = new StatisticData();
+        if (temp != null) {
+            statisticData = temp;
+        } else {
+            statisticData.setDateTimeCode(dTc);
+        }
+        dateTimeCode.delete(0, dateTimeCode.length());
+
         statisticData.setCountReceipts((long) sales.size());
 
         Long sumWithoutDiscounts = 0L;
@@ -115,21 +132,6 @@ public class StatisticsServiceImpl implements StatisticsService {
                         ? 0
                         : sumWithDiscount / statisticData.getCountReceipts()));
 
-        StringBuilder dateTimeCode = new StringBuilder(10);
-
-        dateTimeCode
-                .append(endDateTic.getYear())
-                .append(endDateTic.getMonthValue() < 10 ? "0" + endDateTic.getMonthValue() : endDateTic.getMonth())
-                .append(endDateTic.getDayOfMonth() < 10 ? "0" + endDateTic.getDayOfMonth() : endDateTic.getDayOfMonth())
-                .append(endDateTic.getHour() < 10 ? "0" + endDateTic.getHour() : endDateTic.getHour());
-
-        statisticData.setDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
-
-        StatisticData temp = statisticsRepository.findByDateTimeCode(statisticData.getDateTimeCode());
-        temp.setNewest(false);
-        statisticsRepository.save(temp);
-
-        dateTimeCode.delete(0, dateTimeCode.length());
 
         dateTimeCode
                 .append(startDateTic.getYear())

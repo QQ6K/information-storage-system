@@ -15,12 +15,12 @@ public class StatisticDataMapper {
                 DateTimeFormatterCustom.formatLocalDateTime(statisticData.getStarting()),
                 DateTimeFormatterCustom.formatLocalDateTime(statisticData.getEnding()),
                 statisticData.getCountReceipts(),
-                statisticData.getSumWithoutDiscounts(),
-                statisticData.getAvgSumWithoutDiscounts(),
-                statisticData.getDiscountSum(),
-                statisticData.getSumWithDiscount(),
-                statisticData.getAvgSumWithDiscount(),
-                statisticData.getIncrease()
+                statisticData.getSumWithoutDiscounts()/100,
+                statisticData.getAvgSumWithoutDiscounts()/100,
+                statisticData.getDiscountSum()/100,
+                statisticData.getSumWithDiscount()/100,
+                statisticData.getAvgSumWithDiscount()/100,
+                statisticData.getIncrease()/100
         );
     }
 }
