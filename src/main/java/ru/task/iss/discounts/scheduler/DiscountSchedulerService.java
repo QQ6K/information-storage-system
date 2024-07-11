@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.task.iss.common.DateTimeFormatterCustom;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
@@ -13,6 +14,7 @@ import ru.task.iss.models.Discount;
 import ru.task.iss.models.Item;
 //import ru.task.iss.sales.services.SalesService;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,25 +31,32 @@ public class DiscountSchedulerService {
     private final DiscountRepository discountRepository;
     private final ItemsRepository itemsRepository;
 
-    private static final String cron = "0 * * * * *";
+   // private static final String cron = "0 * * * * *";
     //private static final String cron = "0 0 * * * *";
 
    // @Scheduled(cron = cron)
-   @Scheduled(fixedDelay = 600000)
+   //@Scheduled(fixedDelay = 600000)
+   @Scheduled(fixedDelayString = "${miss.scheduling.delay}")
+   @PostConstruct
    @Transactional
     public void scheduleDiscount() {
        Item item = getRandomItem();
+       if (item == null) {
+           throw new CrudException("Отсутствуют товары на складе");
+       }
         Discount discount = new Discount();
-        discount.setCoefficient(
+         discount.setCoefficient(
                 (ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
         );
         discount.setItemVendorCode(item.getVendorCode());
         discount.setName(item.getName());
-        discount.setStarting(LocalDateTime.now());
-        discount.setEnding(discount.getStarting().plusMinutes(1));
+        LocalDateTime start = LocalDateTime.now();
+        discount.setStarting(start);
+        discount.setEnding(start.plusMinutes(1));
+        discount.setDiscountCode(0L);
         discountRepository.save(discount);
         discount = discountRepository.findFirstByOrderByIdDesc();
-        discount.setDiscountCode(discount.getId());
+        discount.setDiscountCode(discount.getId()+10000000);
         discountRepository.save(discount);
         log.info("Шайтан машина делает скидку id = {}, c кодом {}, для {} {}, % скидки будет {}," +
                         " будет длиться с {} до {}",

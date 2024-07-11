@@ -6,11 +6,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.common.PageDTO;
-import ru.task.iss.exceptions.BadRequestException;
+import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
-import ru.task.iss.items.services.dtos.ItemUpdateDto;
 import ru.task.iss.models.Item;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/items")
@@ -21,8 +22,8 @@ public class ItemsController {
     private final ItemService itemService;
 
     @PostMapping
-    public ItemUpdateDto createItem(
-            @RequestBody ItemDto itemDto
+    public ItemDto createItem(
+            @Valid @RequestBody ItemDto itemDto
     ) {
         log.info("Запрос POST на создание товара /items");
         return itemService.createItem(itemDto);
@@ -44,7 +45,7 @@ public class ItemsController {
         if (size == null) {
             pageable = Pageable.unpaged();
         } else if (size <= 0) {
-            throw new BadRequestException("Ошибка параметров пагинации");
+            throw new CrudException("Ошибка параметров пагинации");
         } else {
             if (page == null) {
                 page = from / size;
@@ -56,7 +57,7 @@ public class ItemsController {
     }
 
     @PatchMapping("/{itemId}")
-    public ItemUpdateDto updateItem(
+    public ItemDto updateItem(
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto
     ) {

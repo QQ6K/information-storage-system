@@ -1,8 +1,8 @@
 package ru.task.iss.exceptions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,5 +22,22 @@ public class ErrorHandler {
         Map map = new HashMap();
         map.put("error", e.getMessage());
         return map;
-}
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> notAvailableException(MethodArgumentNotValidException e) {
+        Map map = new HashMap();
+        map.put("error", e.getFieldError().getDefaultMessage());
+        return map;
+    }
+
+    @ExceptionHandler({InvalidFormatException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> InvalidFormatException(InvalidFormatException e) {
+        Map map = new HashMap();
+        map.put("error", "Неверный формат данных");
+        return map;
+    }
+
 }

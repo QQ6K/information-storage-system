@@ -26,11 +26,11 @@ public class SaleItem{
     @Column(name = "item_id")
     private Long itemId;
     private String name;
-    private Integer price;
-    private Integer amount;
-    private Integer discount;
+    private Long price;
+    private Long amount;
+    private Long discount;
     private Long discountCode;
-    private Integer finalPrice;
-    private Integer totalPrice;
+    private Long finalPrice;
+    private Long totalPrice;
     private LocalDateTime createdOn;
 }

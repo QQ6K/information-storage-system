@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-//import ru.task.iss.cart.service.CartService;
 import ru.task.iss.common.PageDTO;
 import ru.task.iss.common.PageToPageDTOMapper;
 import ru.task.iss.exceptions.CrudException;
@@ -14,7 +13,6 @@ import ru.task.iss.items.repositories.ItemsRepository;
 import ru.task.iss.items.services.ItemService;
 import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.items.services.dtos.ItemMapper;
-import ru.task.iss.items.services.dtos.ItemUpdateDto;
 import ru.task.iss.models.Item;
 
 import java.util.List;
@@ -29,15 +27,16 @@ public class ItemsServiceImpl implements ItemService {
 
     private final ItemsRepository itemsRepository;
 
-    //private final CartService cartService;
-
     private final PageToPageDTOMapper<Item> pageToPageDTOMapper;
 
-    @Override
     @Transactional
-    public ItemUpdateDto createItem(ItemDto itemDto) {
+    public ItemDto createItem(ItemDto itemDto) {
         log.info("Создание товара");
-        return ItemMapper.toUpdateDto(itemsRepository.save(ItemMapper.fromDto(itemDto)));
+        Optional<Item> item = itemsRepository.findByVendorCode(itemDto.getVendorCode());
+        if (item.isPresent()) {
+            throw new CrudException("Товар с таким артикулом существует");
+        }
+        return ItemMapper.toDto(itemsRepository.save(ItemMapper.fromDto(itemDto)));
     }
 
     @Override
@@ -47,9 +46,9 @@ public class ItemsServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemUpdateDto> getItems() {
+    public List<ItemDto> getItems() {
         log.info("Получить список товаров");
-        return itemsRepository.findAll().stream().map(ItemMapper::toUpdateDto).collect(Collectors.toList());
+        return itemsRepository.findAll().stream().map(ItemMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -62,12 +61,12 @@ public class ItemsServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public ItemUpdateDto updateItem(Long itemId, ItemDto itemDto) {
+    public ItemDto updateItem(Long itemId, ItemDto itemDto) {
         Item item = findItemInRepository(itemId);
         Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
         Optional.ofNullable(itemDto.getPrice()).ifPresent(item::setPrice);
         Optional.ofNullable(itemDto.getAmount()).ifPresent(item::setAmount);
-        return ItemMapper.toUpdateDto(itemsRepository.save(item));
+        return ItemMapper.toDto(itemsRepository.save(item));
     }
 
     @Override
@@ -84,5 +83,4 @@ public class ItemsServiceImpl implements ItemService {
                 .orElseThrow(() -> new CrudException("Не удалось найти товар c артикулом = " + vendorCode));
         return item;
     }
-
 }

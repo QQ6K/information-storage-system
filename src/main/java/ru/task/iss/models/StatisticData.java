@@ -21,20 +21,19 @@ public class StatisticData {
     private LocalDateTime starting;
     private LocalDateTime ending;
     @Column(name = "count_receipts")
-    private Integer countReceipts; // количество чеков
+    private Long countReceipts; // количество чеков
     @Column(name = "sum_without_discounts")
-    private Integer sumWithoutDiscounts; //общая стоимость чеков
+    private Long sumWithoutDiscounts; //общая стоимость чеков
     @Column(name = "avg_sum_without_discounts")
-    private Integer avgSumWithoutDiscounts; //стоимость среднего чека
+    private Long avgSumWithoutDiscounts; //стоимость среднего чека
     @Column(name = "discount_sum")
-    private Integer discountSum; //сумма скидок
+    private Long discountSum; //сумма скидок
     @Column(name = "sum_with_discounts")
-    private Integer sumWithDiscount; //общая стоимость с учетом скидок
+    private Long sumWithDiscount; //общая стоимость с учетом скидок
     @Column(name = "avg_sum_with_discounts")
-    private Integer avgSumWithDiscount; //стоимость среднего чека с учетом скидок
+    private Long avgSumWithDiscount; //стоимость среднего чека с учетом скидок
     @Column(name = "increase_receipts")
-    private Integer increase; // прирост среднего чека к предыдущему часу
-
+    private Long increase; // прирост среднего чека к предыдущему часу
     @Column(name = "newest")
     private Boolean newest;
 }

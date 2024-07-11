@@ -1,9 +1,6 @@
 package ru.task.iss.common;
 
-import ru.task.iss.items.services.dtos.ItemDto;
 import ru.task.iss.models.CartItem;
-import ru.task.iss.models.Item;
-import ru.task.iss.models.Sale;
 import ru.task.iss.models.SaleItem;
 
 import java.time.LocalDateTime;

@@ -20,6 +20,6 @@ public class CartItem {
     private Long vendorCode;
     private Long itemId;
     private String name;
-    private Integer price;
-    private Integer amount;
+    private Long price;
+    private Long amount;
 }
