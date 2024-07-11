@@ -41,6 +41,9 @@ public class DiscountSchedulerService {
    @Transactional
     public void scheduleDiscount() {
        Item item = getRandomItem();
+       if (item == null) {
+           throw new CrudException("Отсутствуют товары на складе");
+       }
         Discount discount = new Discount();
          discount.setCoefficient(
                 (ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
