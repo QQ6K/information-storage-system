@@ -1,19 +1,19 @@
 version: '3.8'
 services:
   db:
-    image: qq6k/wise-postgres:1.0
-    container_name: wise-db
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
     ports:
       - "6541:5432"
-    environment:
-      - POSTGRES_DB=wise
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
     volumes:
       - ./init-db:/docker-entrypoint-initdb.d
 
   server:
-    build: server
+    build: wise-server
     image: qq6k/wms-server:1.0
     container_name: server
     ports:
