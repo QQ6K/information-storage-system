@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   db:
-    image: postgres:14-alpine
+    image: qq6k/wise-postgres:1.0
     container_name: wise-db
     ports:
       - "6541:5432"
