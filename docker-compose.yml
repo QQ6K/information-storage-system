@@ -9,6 +9,8 @@ services:
       - POSTGRES_DB=wise
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
 
   server:
     build: server
