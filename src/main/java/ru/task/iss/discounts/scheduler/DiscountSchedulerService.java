@@ -36,7 +36,7 @@ public class DiscountSchedulerService {
 
    // @Scheduled(cron = cron)
    //@Scheduled(fixedDelay = 600000)
-   @Scheduled(fixedDelayString = "${miss.scheduling.delay}")
+   @Scheduled(fixedDelayString = "${wise.scheduling.delay}")
    @PostConstruct
    @Transactional
     public void scheduleDiscount() {

@@ -2,11 +2,11 @@ version: '3.8'
 services:
   db:
     image: postgres:14-alpine
-    container_name: miss-db
+    container_name: wise-db
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=miss
+      - POSTGRES_DB=wise
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
@@ -19,15 +19,15 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/miss
-      - POSTGRES_DB=miss
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/wise
+      - POSTGRES_DB=wise
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
   client:
-    build: miss-front
+    build: wise-front
     image: qq6k/wms-frontend:1.0
-    container_name: miss-front
+    container_name: wise-front
     ports:
       - '3000:3000'
     stdin_open: true
