@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @SpringBootApplication
-public class InformationStorageSystemApplication {
+public class WarehouseInformationSystemExample {
 
     @Bean
     public CorsFilter corsFilter() {
@@ -42,7 +42,7 @@ public class InformationStorageSystemApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(InformationStorageSystemApplication.class, args);
+        SpringApplication.run(WarehouseInformationSystemExample.class, args);
 
     }
 
