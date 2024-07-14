@@ -28,7 +28,7 @@ services:
 
   client:
     build: wise-front
-    image: qq6k/wms-frontend:1.0
+    image: qq6k/wms-front:1.0
     container_name: wise-front
     ports:
       - '3000:3000'
