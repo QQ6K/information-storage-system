@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.task.iss.cart.service.CartService;
-import ru.task.iss.models.SaleItem;
-import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.services.StatisticsService;
 import ru.task.iss.statistics.services.dto.SaleItemDto;
 import ru.task.iss.statistics.services.dto.StatisticDataDto;
@@ -31,8 +29,8 @@ public class StatisticsController {
     @GetMapping("/{vendorCode}")
     public Page<SaleItemDto> getStatItem(@PathVariable Long vendorCode, Pageable pageable) {
         log.info("Запрос GET продажи товара  /{}", vendorCode);
-         return cartService.getSalesByVendorCode(vendorCode, pageable);
-         //statisticsService.getStatForItem(vendorCode);
+        return cartService.getSalesByVendorCode(vendorCode, pageable);
+        //statisticsService.getStatForItem(vendorCode);
     }
 
     @GetMapping

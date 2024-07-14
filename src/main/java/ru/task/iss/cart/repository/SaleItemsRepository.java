@@ -6,14 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.task.iss.models.Sale;
 import ru.task.iss.models.SaleItem;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Repository
-public interface SaleItemsRepository extends JpaRepository<SaleItem,Long> {
+public interface SaleItemsRepository extends JpaRepository<SaleItem, Long> {
 
     @Query(value = "SELECT MAX(sale_code) FROM sale_items", nativeQuery = true)
     Long findMaximum();

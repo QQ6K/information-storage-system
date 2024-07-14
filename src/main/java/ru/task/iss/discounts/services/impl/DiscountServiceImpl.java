@@ -7,14 +7,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.task.iss.common.PageDTO;
-import ru.task.iss.common.PageToPageDTOMapper;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.discounts.services.DiscountService;
 import ru.task.iss.discounts.services.dto.DiscountDto;
 import ru.task.iss.discounts.services.dto.DiscountMapper;
 import ru.task.iss.models.Discount;
-import ru.task.iss.models.Item;
 
 import java.util.List;
 import java.util.stream.Collectors;

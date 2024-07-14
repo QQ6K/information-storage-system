@@ -43,7 +43,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         log.info("Сделать статистический подсчет Стат");
         LocalDateTime endDateTic = LocalDateTime.now();
         LocalDateTime startDateTic = endDateTic.minusHours(1);
-        statCalc(endDateTic,startDateTic);
+        statCalc(endDateTic, startDateTic);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             for (int tic = 0; tic <= timeIntervalCount; tic++) {
                 LocalDateTime startDateTic = startDate.plusHours(tic);
                 LocalDateTime endDateTic = startDate.plusHours(tic + 1);
-                statCalc(endDateTic,startDateTic);
+                statCalc(endDateTic, startDateTic);
             }
         } else throw new CrudException("Нет продаж. Невозможно посчитать статистику");
     }
@@ -89,7 +89,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     public void statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic) {
 
         Collection<Sale> sales = salesRepository.getSales(startDateTic, endDateTic);
-
 
 
         StringBuilder dateTimeCode = new StringBuilder(10);

@@ -5,7 +5,7 @@ import ru.task.iss.models.Discount;
 
 public class DiscountMapper {
 
-    public static DiscountDto toDiscountDto (Discount discount){
+    public static DiscountDto toDiscountDto(Discount discount) {
         return new DiscountDto(
                 discount.getDiscountCode(),
                 discount.getCoefficient(),

@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.task.iss.models.Discount;
 
-public interface DiscountRepository extends JpaRepository<Discount,Long> {
+public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     Discount findFirstByOrderByIdDesc();
 

@@ -3,7 +3,6 @@ package ru.task.iss.statistics.services;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.models.SalesItemStatDto;
-import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.services.dto.StatisticDataDto;
 
 import java.time.LocalDateTime;

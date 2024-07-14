@@ -11,7 +11,6 @@ import ru.task.iss.cart.repository.CartItemsRepository;
 import ru.task.iss.cart.repository.SaleItemsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
-import ru.task.iss.common.DateTimeFormatterCustom;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.items.repositories.ItemsRepository;
@@ -59,7 +58,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Page<SaleItemDto> getSalesByVendorCode(Long vendorCode, Pageable pageable) {
-        Page<SaleItem> saleItemsPage= saleItemsRepository
+        Page<SaleItem> saleItemsPage = saleItemsRepository
                 .findByVendorCode(vendorCode, pageable);
         List<SaleItemDto> saleItemDtos = saleItemsPage.getContent().stream()
                 .map(SaleItemMapper::toSaleItemDto)

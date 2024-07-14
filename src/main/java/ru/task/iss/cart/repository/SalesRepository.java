@@ -4,13 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.task.iss.models.Sale;
-import ru.task.iss.models.SaleItem;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Repository
-public interface SalesRepository extends JpaRepository<Sale,Long> {
+public interface SalesRepository extends JpaRepository<Sale, Long> {
 
     @Query(value = "SELECT MIN(created_on) FROM sales s", nativeQuery = true)
     LocalDateTime getStartDate();

@@ -6,8 +6,8 @@ import ru.task.iss.models.SaleItem;
 import java.time.LocalDateTime;
 
 public class FromCartToSalesMapper {
-    public static SaleItem fromCartToSale(CartItem cartItem){
-        SaleItem saleItem =  new SaleItem();
+    public static SaleItem fromCartToSale(CartItem cartItem) {
+        SaleItem saleItem = new SaleItem();
         //sale.setSalesCode();
         saleItem.setName(cartItem.getName());
         saleItem.setPrice(cartItem.getPrice());

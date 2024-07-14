@@ -3,8 +3,6 @@ package ru.task.iss.items.services.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.NumberFormat;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Min;
 

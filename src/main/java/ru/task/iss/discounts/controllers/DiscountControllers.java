@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.task.iss.common.PageDTO;
 import ru.task.iss.discounts.services.DiscountService;
 import ru.task.iss.discounts.services.dto.DiscountDto;
-import ru.task.iss.exceptions.BadRequestException;
 import ru.task.iss.exceptions.CrudException;
-import ru.task.iss.models.Discount;
 
 @RestController
 @RequestMapping("/discounts")
