@@ -12,7 +12,7 @@ import lombok.Setter;
 public class DiscountDto {
     private Long discountCode;
     private Integer coefficient;
-    private Long itemVendorCode;
+    private Long productVendorCode;
     private String name;
     private String starting;
     private String ending;

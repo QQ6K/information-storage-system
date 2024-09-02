@@ -6,11 +6,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.task.iss.cart.repository.SaleItemsRepository;
+import ru.task.iss.cart.repository.SaleProductsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.exceptions.CrudException;
 import ru.task.iss.models.Sale;
-import ru.task.iss.models.SalesItemStatDto;
+import ru.task.iss.models.SalesProductStatDto;
 import ru.task.iss.models.StatisticData;
 import ru.task.iss.statistics.repositories.StatisticsRepository;
 import ru.task.iss.statistics.services.StatisticsService;
@@ -34,7 +34,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
 
-    private final SaleItemsRepository saleItemsRepository;
+    private final SaleProductsRepository saleProductsRepository;
 
     @Scheduled(fixedDelay = 3600000)
     @Override
@@ -77,11 +77,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public SalesItemStatDto getStatForItem(Long vendorCode) {
-        SalesItemStatDto salesItemStat = new SalesItemStatDto();
-        salesItemStat.setTotalCountSales(saleItemsRepository.getSaleItemsCountByVendorCode(vendorCode));
-        salesItemStat.setTotalSum(saleItemsRepository.getSaleItemsTotalSumByVendorCode(vendorCode));
-        return salesItemStat;
+    public SalesProductStatDto getStatForProduct(Long vendorCode) {
+        SalesProductStatDto salesProductStat = new SalesProductStatDto();
+        salesProductStat.setTotalCountSales(saleProductsRepository.getSaleProductsCountByVendorCode(vendorCode));
+        salesProductStat.setTotalSum(saleProductsRepository.getSaleProductsTotalSumByVendorCode(vendorCode));
+        return salesProductStat;
     }
 
 

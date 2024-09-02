@@ -9,7 +9,7 @@ public class DiscountMapper {
         return new DiscountDto(
                 discount.getDiscountCode(),
                 discount.getCoefficient(),
-                discount.getItemVendorCode(),
+                discount.getProductVendorCode(),
                 discount.getName(),
                 DateTimeFormatterCustom.formatLocalDateTime(discount.getStarting()),
                 DateTimeFormatterCustom.formatLocalDateTime(discount.getEnding()));

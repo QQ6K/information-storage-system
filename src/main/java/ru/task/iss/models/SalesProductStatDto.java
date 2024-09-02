@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SalesItemStatDto {
+public class SalesProductStatDto {
     private Long totalSum;
 
     private int totalCountSales;

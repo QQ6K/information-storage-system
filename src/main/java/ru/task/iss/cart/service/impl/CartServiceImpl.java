@@ -7,19 +7,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.task.iss.cart.repository.CartItemsRepository;
-import ru.task.iss.cart.repository.SaleItemsRepository;
+import ru.task.iss.cart.repository.CartProductsRepository;
+import ru.task.iss.cart.repository.SaleProductsRepository;
 import ru.task.iss.cart.repository.SalesRepository;
 import ru.task.iss.cart.service.CartService;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
-import ru.task.iss.items.repositories.ItemsRepository;
-import ru.task.iss.items.services.ItemService;
-import ru.task.iss.items.services.dtos.ItemDto;
-import ru.task.iss.items.services.dtos.ItemMapper;
+import ru.task.iss.products.repositories.ProductsRepository;
+import ru.task.iss.products.services.ProductsService;
+import ru.task.iss.products.services.dtos.ProductDto;
+import ru.task.iss.products.services.dtos.ProductMapper;
 import ru.task.iss.models.*;
-import ru.task.iss.statistics.services.dto.SaleItemDto;
-import ru.task.iss.statistics.services.dto.SaleItemMapper;
+import ru.task.iss.statistics.services.dto.SaleProductDto;
+import ru.task.iss.statistics.services.dto.SaleProductMapper;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -34,79 +34,79 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CartServiceImpl implements CartService {
 
-    private final ItemService itemService;
+    private final ProductsService productsService;
 
-    private final CartItemsRepository cartItemsRepository;
+    private final CartProductsRepository cartProductsRepository;
 
-    private final SaleItemsRepository saleItemsRepository;
+    private final SaleProductsRepository saleProductsRepository;
 
     private final SalesRepository salesRepository;
 
-    private final ItemsRepository itemsRepository;
+    private final ProductsRepository productsRepository;
 
     private final DiscountRepository discountRepository;
 
     private void clearCart() {
-        cartItemsRepository.deleteAll();
+        cartProductsRepository.deleteAll();
     }
 
-    private void validateAmount(Long itemFromRepositoryAmount, Long cartItemToSaveAmount) {
-        if (itemFromRepositoryAmount < cartItemToSaveAmount) {
+    private void validateAmount(Long productFromRepositoryAmount, Long cartProductToSaveAmount) {
+        if (productFromRepositoryAmount < cartProductToSaveAmount) {
             throw new CrudException("Количество в корзине больше, чем на складе!");
         }
     }
 
     @Override
-    public Page<SaleItemDto> getSalesByVendorCode(Long vendorCode, Pageable pageable) {
-        Page<SaleItem> saleItemsPage = saleItemsRepository
+    public Page<SaleProductDto> getSalesByVendorCode(Long vendorCode, Pageable pageable) {
+        Page<SaleProduct> saleProductPage = saleProductsRepository
                 .findByVendorCode(vendorCode, pageable);
-        List<SaleItemDto> saleItemDtos = saleItemsPage.getContent().stream()
-                .map(SaleItemMapper::toSaleItemDto)
+        List<SaleProductDto> saleProductDtos = saleProductPage.getContent().stream()
+                .map(SaleProductMapper::toSaleProductDto)
                 .collect(Collectors.toList());
-        return new PageImpl<>(saleItemDtos, pageable, saleItemsPage.getTotalElements());
+        return new PageImpl<>(saleProductDtos, pageable, saleProductPage.getTotalElements());
     }
 
     @Override
-    public CartItem findItemInCart(Long vendorCode) {
-        CartItem cartItem = cartItemsRepository.getCartItemByVendorCode(vendorCode);
-        return cartItem;
+    public CartProduct findProductInCart(Long vendorCode) {
+        CartProduct cartProduct = cartProductsRepository.getCartProductByVendorCode(vendorCode);
+        return cartProduct;
     }
 
     @Override
-    public CartItem checkItemInCart(Long vendorCode) {
-        CartItem cartItem = cartItemsRepository
+    public CartProduct checkProductInCart(Long vendorCode) {
+        CartProduct cartProduct = cartProductsRepository
                 .findByVendorCode(vendorCode).orElseThrow(() -> new CrudException(
                         "В корзине нет товара c артикулом = " + vendorCode));
-        return cartItem;
+        return cartProduct;
     }
 
     @Transactional
     @Override
-    public ItemDto addItemToCart(CartItem cartItem) {
-        CartItem cartItemToSave = findItemInCart(cartItem.getVendorCode());
-        Item itemFromRepository = itemService.findItemInRepository(cartItem.getVendorCode());
-        validateAmount(itemFromRepository.getAmount(), cartItem.getAmount());
-        cartItem.setItemId(itemFromRepository.getId());
-        if (Optional.ofNullable(cartItemToSave).isPresent()) {
-            cartItemToSave.setAmount(cartItem.getAmount());
-        } else cartItemToSave = cartItem;
-        log.info("Добавление товара в корзину {} ", cartItemToSave.getName());
-        return ItemMapper.toItemDtoFromCartItem(cartItemsRepository.save(cartItemToSave));
+    public ProductDto addProductToCart(CartProduct cartProduct) {
+        CartProduct cartProductToSave = findProductInCart(cartProduct.getVendorCode());
+        Product productFromRepository = productsService.findProductInRepository(cartProduct.getVendorCode());
+        validateAmount(productFromRepository.getAmount(), cartProduct.getAmount());
+        cartProduct.setProductId(productFromRepository.getId());
+        if (Optional.ofNullable(cartProductToSave).isPresent()) {
+            cartProductToSave.setAmount(cartProduct.getAmount());
+        } else cartProductToSave = cartProduct;
+        log.info("Добавление товара в корзину {} ", cartProductToSave.getName());
+        return ProductMapper.toProductDtoFromCartProduct(cartProductsRepository.save(cartProductToSave));
     }
 
     @Transactional
     @Override
-    public void removeItemFromCart(Long vendorCode) {
-        checkItemInCart(vendorCode);
+    public void removeProductFromCart(Long vendorCode) {
+        checkProductInCart(vendorCode);
         log.info("Удаление товара из корзины");
-        cartItemsRepository.deleteCartItemByVendorCode(vendorCode);
+        cartProductsRepository.deleteCartProductByVendorCode(vendorCode);
     }
 
     @Override
-    public Collection<ItemDto> getItemsFromCart() {
+    public Collection<ProductDto> getProductFromCart() {
         log.info("Получение товаров из корзины");
-        Collection<CartItem> cartItems = cartItemsRepository.findAll();
-        Collection<ItemDto> response = cartItems.stream().map(ItemMapper::toItemDtoFromCartItem).collect(Collectors.toList());
+        Collection<CartProduct> cartProducts = cartProductsRepository.findAll();
+        Collection<ProductDto> response = cartProducts.stream().map(ProductMapper::toProductDtoFromCartProduct).collect(Collectors.toList());
         return response;
     }
 
@@ -122,13 +122,13 @@ public class CartServiceImpl implements CartService {
     public void buyCart() {
         try {
 
-            Long saleCode = saleItemsRepository.findMaximum();
+            Long saleCode = saleProductsRepository.findMaximum();
             log.info("поковырялись в репозитории нашли КОД {}", saleCode);
             if (saleCode == null) {
                 saleCode = 1L;
             }
             log.info("установлен прошлый КОД {}", saleCode);
-            Collection<CartItem> cart = cartItemsRepository.findAll();
+            Collection<CartProduct> cart = cartProductsRepository.findAll();
             saleCode++;
             Discount discount = discountRepository.findFirstByOrderByIdDesc();
             Integer coefficient;
@@ -141,46 +141,46 @@ public class CartServiceImpl implements CartService {
                     .discountCode(0L)
                     .build();
 
-            for (CartItem cartItem : cart) {
-                Item item = itemService.findItemInRepository(cartItem.getVendorCode());
-                if (item == null) {
-                    removeItemFromCart(cartItem.getVendorCode());
+            for (CartProduct cartProduct : cart) {
+                Product product = productsService.findProductInRepository(cartProduct.getVendorCode());
+                if (product == null) {
+                    removeProductFromCart(cartProduct.getVendorCode());
                 } else {
-                    SaleItem saleItem = new SaleItem();
-                    if (Objects.equals(discount.getItemVendorCode(), cartItem.getVendorCode())) {
+                    SaleProduct saleProduct = new SaleProduct();
+                    if (Objects.equals(discount.getProductVendorCode(), cartProduct.getVendorCode())) {
                         coefficient = (100 - discount.getCoefficient());
-                        saleItem.setDiscountCode(discount.getDiscountCode());
-                        saleItem.setDiscount(Long.valueOf(coefficient));
+                        saleProduct.setDiscountCode(discount.getDiscountCode());
+                        saleProduct.setDiscount(Long.valueOf(coefficient));
                     } else {
-                        saleItem.setDiscountCode(0L);
-                        saleItem.setDiscount(100L);
+                        saleProduct.setDiscountCode(0L);
+                        saleProduct.setDiscount(100L);
                         coefficient = 100;
                     }
-                    Item itemNewAmount = itemService.findItemInRepository(cartItem.getVendorCode());
+                    Product productNewAmount = productsService.findProductInRepository(cartProduct.getVendorCode());
 
-                    if (cartItem.getAmount() > itemNewAmount.getAmount())
-                        throw new CrudException("Товар: " + itemNewAmount.getName() + ". На складе: " + itemNewAmount.getAmount()
-                                + " шт. Невозможно купить: " + cartItem.getAmount() + " шт.");
+                    if (cartProduct.getAmount() > productNewAmount.getAmount())
+                        throw new CrudException("Товар: " + productNewAmount.getName() + ". На складе: " + productNewAmount.getAmount()
+                                + " шт. Невозможно купить: " + cartProduct.getAmount() + " шт.");
 
-                    saleItem.setVendorCode(cartItem.getVendorCode());
-                    saleItem.setSaleCode(saleCode);
-                    saleItem.setName(cartItem.getName());
-                    saleItem.setPrice(itemNewAmount.getPrice()); // один товар
-                    saleItem.setAmount(cartItem.getAmount());
-                    saleItem.setFinalPrice(itemNewAmount.getPrice() * coefficient / 100);
-                    long price = saleItem.getFinalPrice();
-                    saleItem.setTotalPrice(price * cartItem.getAmount());
-                    saleItem.setCreatedOn(LocalDateTime.now());
-                    saleItem.setItemId(cartItem.getItemId());
+                    saleProduct.setVendorCode(cartProduct.getVendorCode());
+                    saleProduct.setSaleCode(saleCode);
+                    saleProduct.setName(cartProduct.getName());
+                    saleProduct.setPrice(productNewAmount.getPrice()); // один товар
+                    saleProduct.setAmount(cartProduct.getAmount());
+                    saleProduct.setFinalPrice(productNewAmount.getPrice() * coefficient / 100);
+                    long price = saleProduct.getFinalPrice();
+                    saleProduct.setTotalPrice(price * cartProduct.getAmount());
+                    saleProduct.setCreatedOn(LocalDateTime.now());
+                    saleProduct.setProductId(cartProduct.getProductId());
 
-                    sale.setPrice(sale.getPrice() + saleItem.getPrice() * cartItem.getAmount());
-                    sale.setFinalPrice(sale.getFinalPrice() + saleItem.getTotalPrice());
+                    sale.setPrice(sale.getPrice() + saleProduct.getPrice() * cartProduct.getAmount());
+                    sale.setFinalPrice(sale.getFinalPrice() + saleProduct.getTotalPrice());
                     sale.setDiscountSum(sale.getPrice() - sale.getFinalPrice());
-                    sale.setDiscountCode(saleItem.getDiscountCode());
+                    sale.setDiscountCode(saleProduct.getDiscountCode());
 
-                    saleItemsRepository.save(saleItem);
-                    itemNewAmount.setAmount(itemNewAmount.getAmount() - cartItem.getAmount());
-                    itemsRepository.save(itemNewAmount);
+                    saleProductsRepository.save(saleProduct);
+                    productNewAmount.setAmount(productNewAmount.getAmount() - cartProduct.getAmount());
+                    productsRepository.save(productNewAmount);
                 }
             }
             clearCart();

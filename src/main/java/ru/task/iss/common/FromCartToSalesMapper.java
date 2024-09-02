@@ -1,22 +1,22 @@
 package ru.task.iss.common;
 
-import ru.task.iss.models.CartItem;
-import ru.task.iss.models.SaleItem;
+import ru.task.iss.models.CartProduct;
+import ru.task.iss.models.SaleProduct;
 
 import java.time.LocalDateTime;
 
 public class FromCartToSalesMapper {
-    public static SaleItem fromCartToSale(CartItem cartItem) {
-        SaleItem saleItem = new SaleItem();
+    public static SaleProduct fromCartToSale(CartProduct cartProduct) {
+        SaleProduct saleProduct = new SaleProduct();
         //sale.setSalesCode();
-        saleItem.setName(cartItem.getName());
-        saleItem.setPrice(cartItem.getPrice());
-        saleItem.setAmount(cartItem.getAmount());
+        saleProduct.setName(cartProduct.getName());
+        saleProduct.setPrice(cartProduct.getPrice());
+        saleProduct.setAmount(cartProduct.getAmount());
         //sale.setDiscount();
         //sale.setDiscountCode();
         //sale.setFinalPrice();
         //sale.setTotalPrice();
-        saleItem.setCreatedOn(LocalDateTime.now());
-        return saleItem;
+        saleProduct.setCreatedOn(LocalDateTime.now());
+        return saleProduct;
     }
 }

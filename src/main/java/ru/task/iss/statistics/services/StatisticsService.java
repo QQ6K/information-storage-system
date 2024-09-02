@@ -2,7 +2,7 @@ package ru.task.iss.statistics.services;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
-import ru.task.iss.models.SalesItemStatDto;
+import ru.task.iss.models.SalesProductStatDto;
 import ru.task.iss.statistics.services.dto.StatisticDataDto;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public interface StatisticsService {
     void getRecalculate();
 
 
-    SalesItemStatDto getStatForItem(Long vendorCode);
+    SalesProductStatDto getStatForProduct(Long vendorCode);
 
     void statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic);
 }

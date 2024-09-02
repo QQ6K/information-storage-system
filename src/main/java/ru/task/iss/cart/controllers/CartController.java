@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.cart.service.CartService;
-import ru.task.iss.items.services.dtos.ItemDto;
-import ru.task.iss.models.CartItem;
+import ru.task.iss.products.services.dtos.ProductDto;
+import ru.task.iss.models.CartProduct;
 
 import java.util.Collection;
 
@@ -18,26 +18,26 @@ public class CartController {
     private final CartService cartService;
 
     @PostMapping
-    public ItemDto addItemToCart(
-            @RequestBody CartItem cartItem
+    public ProductDto addProductToCart(
+            @RequestBody CartProduct cartProduct
     ) {
         log.info("Запрос POST на добавление товара /cart");
-        return cartService.addItemToCart(cartItem);
+        return cartService.addProductToCart(cartProduct);
     }
 
     @GetMapping
-    public Collection<ItemDto> getItemsFromCart(
+    public Collection<ProductDto> getProductFromCart(
     ) {
         log.info("Запрос GET на получение товаров из корзины /cart");
-        return cartService.getItemsFromCart();
+        return cartService.getProductFromCart();
     }
 
     @DeleteMapping("/{vendorCode}")
-    public void removeItemFromCart(
+    public void removeProductFromCart(
             @PathVariable Long vendorCode
     ) {
         log.info("Запрос DELETE на удаление товара /cart/{}", vendorCode);
-        cartService.removeItemFromCart(vendorCode);
+        cartService.removeProductFromCart(vendorCode);
     }
 
     @DeleteMapping

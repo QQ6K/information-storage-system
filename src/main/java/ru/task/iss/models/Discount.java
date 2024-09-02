@@ -23,8 +23,8 @@ public class Discount {
     @Column(name = "discount_code")
     private Long discountCode;
     private Integer coefficient;
-    @Column(name = "item_vendor_code")
-    private Long itemVendorCode;
+    @Column(name = "product_vendor_code")
+    private Long productVendorCode;
     private String name;
     private LocalDateTime starting;
     private LocalDateTime ending;

@@ -1,4 +1,4 @@
-package ru.task.iss.items.controllers;
+package ru.task.iss.products.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,37 +7,37 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import ru.task.iss.common.PageDTO;
 import ru.task.iss.exceptions.CrudException;
-import ru.task.iss.items.services.ItemService;
-import ru.task.iss.items.services.dtos.ItemDto;
-import ru.task.iss.models.Item;
+import ru.task.iss.products.services.ProductsService;
+import ru.task.iss.products.services.dtos.ProductDto;
+import ru.task.iss.models.Product;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/items")
+@RequestMapping(path = "/products")
 @RequiredArgsConstructor
 @Slf4j
-public class ItemsController {
+public class ProductsController {
 
-    private final ItemService itemService;
+    private final ProductsService productsService;
 
     @PostMapping
-    public ItemDto createItem(
-            @Valid @RequestBody ItemDto itemDto
+    public ProductDto createProduct(
+            @Valid @RequestBody ProductDto productDto
     ) {
-        log.info("Запрос POST на создание товара /items");
-        return itemService.createItem(itemDto);
+        log.info("Запрос POST на создание товара /products");
+        return productsService.createProduct(productDto);
     }
 
     @GetMapping("/{vendorCode}")
-    public Item readItem(
+    public Product readProduct(
             @PathVariable Long vendorCode
     ) {
-        return itemService.readItem(vendorCode);
+        return productsService.readProduct(vendorCode);
     }
 
     @GetMapping
-    public PageDTO<Item> getItems(
+    public PageDTO<Product> getProducts(
             @RequestParam(defaultValue = "0", required = false) Integer from,
             @RequestParam(defaultValue = "10", required = false) Integer size,
             @RequestParam(required = false) Integer page) {
@@ -52,24 +52,24 @@ public class ItemsController {
             }
             pageable = PageRequest.of(page, size);
         }
-        log.info("Запрос GET /items?size={}&page={}", size, page);
-        return itemService.getItemsPage(pageable);
+        log.info("Запрос GET /products?size={}&page={}", size, page);
+        return productsService.getProductPage(pageable);
     }
 
-    @PatchMapping("/{itemId}")
-    public ItemDto updateItem(
-            @PathVariable Long itemId,
-            @RequestBody ItemDto itemDto
+    @PatchMapping("/{productId}")
+    public ProductDto updateProduct(
+            @PathVariable Long productId,
+            @RequestBody ProductDto productDto
     ) {
-        log.info("Запрос PATCH на изменение товара id = {}", itemId);
-        return itemService.updateItem(itemId, itemDto);
+        log.info("Запрос PATCH на изменение товара id = {}", productId);
+        return productsService.updateProduct(productId, productDto);
     }
 
     @DeleteMapping("/{vendorId}")
-    public void deleteItem(
+    public void deleteProduct(
             @PathVariable Long vendorId
     ) {
-        itemService.deleteItem(vendorId);
+        productsService.deleteProduct(vendorId);
     }
 
 

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.task.iss.discounts.repository.DiscountRepository;
 import ru.task.iss.exceptions.CrudException;
-import ru.task.iss.items.repositories.ItemsRepository;
+import ru.task.iss.products.repositories.ProductsRepository;
 import ru.task.iss.models.Discount;
-import ru.task.iss.models.Item;
+import ru.task.iss.models.Product;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public class DiscountSchedulerService {
     private static final int maxRandomDiscount = 10;
 
     private final DiscountRepository discountRepository;
-    private final ItemsRepository itemsRepository;
+    private final ProductsRepository productsRepository;
 
     // private static final String cron = "0 * * * * *";
     //private static final String cron = "0 0 * * * *";
@@ -38,16 +38,16 @@ public class DiscountSchedulerService {
     @PostConstruct
     @Transactional
     public void scheduleDiscount() {
-        Item item = getRandomItem();
-        if (item == null) {
+        Product product = getRandomProduct();
+        if (product == null) {
             throw new CrudException("Отсутствуют товары на складе");
         }
         Discount discount = new Discount();
         discount.setCoefficient(
                 (ThreadLocalRandom.current().nextInt(minRandomDiscount, maxRandomDiscount + 1))
         );
-        discount.setItemVendorCode(item.getVendorCode());
-        discount.setName(item.getName());
+        discount.setProductVendorCode(product.getVendorCode());
+        discount.setName(product.getName());
         LocalDateTime start = LocalDateTime.now();
         discount.setStarting(start);
         discount.setEnding(start.plusMinutes(1));
@@ -58,23 +58,23 @@ public class DiscountSchedulerService {
         discountRepository.save(discount);
         log.info("Скидка id = {}, c кодом {}, для {} {}, % скидки будет {}," +
                         " будет длиться с {} до {}",
-                discount.getId(), discount.getDiscountCode(), discount.getItemVendorCode(), discount.getName(), discount.getCoefficient(), discount.getStarting(),
+                discount.getId(), discount.getDiscountCode(), discount.getProductVendorCode(), discount.getName(), discount.getCoefficient(), discount.getStarting(),
                 discount.getEnding());
     }
 
-    private Item getRandomItem() {
+    private Product getRandomProduct() {
         // Long n = itemsRepository.count();
         // Long max = itemsRepository.findMax();
         // Long id = null;
         // if (n != 0) {
         //    log.info("Репозиторий товаров id = {}", n);
         //    log.info("Репозиторий товаров max id = {}", max);
-        Item item = itemsRepository.getRandomItem();
+        Product product = productsRepository.getRandomProduct();
         //   log.info("Случайный товар id = {}", id);
         // }
         //throw new CrudException("Empty repository");
         //itemsRepository.findByVendorCode(vendorCode);
-        return item;
+        return product;
     }
 
     public Discount getCurrentDiscount() {

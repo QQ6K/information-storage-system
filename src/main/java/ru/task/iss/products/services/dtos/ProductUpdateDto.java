@@ -1,4 +1,4 @@
-package ru.task.iss.items.services.dtos;
+package ru.task.iss.products.services.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import javax.validation.constraints.Min;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemUpdateDto {
+public class ProductUpdateDto {
 
     private Long id;
 

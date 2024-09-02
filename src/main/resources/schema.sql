@@ -1,14 +1,14 @@
-drop table if exists items cascade;
+drop table if exists products cascade;
 drop table if exists statistics cascade;
-drop table if exists cart_items cascade;
+drop table if exists cart_products cascade;
 drop table if exists sales cascade;
 drop table if exists discounts cascade;
-drop table if exists sale_items cascade;
+drop table if exists sale_products cascade;
 drop table if exists users cascade;
 drop table if exists roles cascade;
 drop table if exists users_roles cascade;
 
-CREATE TABLE IF NOT EXISTS items
+CREATE TABLE IF NOT EXISTS products
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT       NOT NULL UNIQUE,
@@ -17,22 +17,22 @@ CREATE TABLE IF NOT EXISTS items
     amount      BIGINT       NOT NULL CHECK (amount >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS cart_items
+CREATE TABLE IF NOT EXISTS cart_products
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     vendor_code BIGINT       NOT NULL,
-    item_id     BIGINT       NOT NULL REFERENCES items (id) ON DELETE CASCADE,
+    products_id     BIGINT       NOT NULL REFERENCES products (id) ON DELETE CASCADE,
     name        VARCHAR(128) NOT NULL,
     price       INT          NOT NULL,
     amount      BIGINT       NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS sale_items
+CREATE TABLE IF NOT EXISTS sale_products
 (
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     sale_code     BIGINT       NOT NULL,
-    vendor_code   BIGINT       NOT NULL REFERENCES items (vendor_code) ON DELETE SET NULL,
-    item_id       BIGINT,
+    vendor_code   BIGINT       NOT NULL REFERENCES products (vendor_code) ON DELETE SET NULL,
+    product_id       BIGINT,
     name          VARCHAR(128) NOT NULL,
     price         INT          NOT NULL,
     final_price   INT          NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS discounts
     discount_code    BIGINT,
     name             VARCHAR(128)                        NOT NULL,
     coefficient      DOUBLE precision                    NOT NULL,
-    item_vendor_code BIGINT                              NOT NULL,
+    product_vendor_code BIGINT                              NOT NULL,
     starting         TIMESTAMP,
     ending           TIMESTAMP
 );

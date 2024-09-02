@@ -12,13 +12,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cart_items")
-public class CartItem {
+@Table(name = "cart_products")
+public class CartProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long vendorCode;
-    private Long itemId;
+    private Long productId;
     private String name;
     private Long price;
     private Long amount;

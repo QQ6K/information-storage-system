@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "sale_items")
-public class SaleItem {
+@Table(name = "sale_products")
+public class SaleProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +22,8 @@ public class SaleItem {
     private Long saleCode;
     @Column(name = "vendor_code")
     private Long vendorCode;
-    @Column(name = "item_id")
-    private Long itemId;
+    @Column(name = "product_id")
+    private Long productId;
     private String name;
     private Long price;
     private Long amount;

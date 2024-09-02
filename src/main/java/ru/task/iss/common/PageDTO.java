@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageDTO<Item> {
-    private List<Item> data;
+public class PageDTO<Product> {
+    private List<Product> data;
     //private int pageNo;
     //private int pageSize;
     private long totalElements;

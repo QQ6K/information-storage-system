@@ -13,8 +13,8 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "items")
-public class Item {
+@Table(name = "products")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -24,8 +24,8 @@ public class Item {
     Long price;
     Long amount;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id")
-    Collection<SaleItem> saleItems;
+    @JoinColumn(name = "product_id")
+    Collection<SaleProduct> saleProducts;
 
     public void setPrice(Double priceDouble) {
         if (priceDouble != null) {
