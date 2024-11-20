@@ -19,6 +19,7 @@ import ru.task.miss.mappers.StatisticDataMapper;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -87,25 +88,18 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public void statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic) {
-
         Collection<Sale> sales = salesRepository.getSales(startDateTic, endDateTic);
 
-
-        StringBuilder dateTimeCode = new StringBuilder(10);
-        dateTimeCode
-                .append(endDateTic.getYear())
-                .append(endDateTic.getMonthValue() < 10 ? "0" + endDateTic.getMonthValue() : endDateTic.getMonth())
-                .append(endDateTic.getDayOfMonth() < 10 ? "0" + endDateTic.getDayOfMonth() : endDateTic.getDayOfMonth())
-                .append(endDateTic.getHour() < 10 ? "0" + endDateTic.getHour() : endDateTic.getHour());
-        int dTc = Integer.parseInt(String.valueOf(dateTimeCode));
+        // Используем новый метод для генерации dateTimeCode для endDateTic
+        int dTc = generateDateTimeCode(endDateTic);
         StatisticData temp = statisticsRepository.findByDateTimeCode(dTc);
         StatisticData statisticData = new StatisticData();
+
         if (temp != null) {
             statisticData = temp;
         } else {
             statisticData.setDateTimeCode(dTc);
         }
-        dateTimeCode.delete(0, dateTimeCode.length());
 
         statisticData.setCountReceipts((long) sales.size());
 
@@ -125,21 +119,16 @@ public class StatisticsServiceImpl implements StatisticsService {
                         ? 0
                         : sumWithoutDiscounts / statisticData.getCountReceipts());
         statisticData.setDiscountSum(discountSum);
-        statisticData.setSumWithDiscount((sumWithDiscount));
+        statisticData.setSumWithDiscount(sumWithDiscount);
         statisticData.setAvgSumWithDiscount(
                 (statisticData.getCountReceipts() == 0
                         ? 0
                         : sumWithDiscount / statisticData.getCountReceipts()));
 
-
-        dateTimeCode
-                .append(startDateTic.getYear())
-                .append(startDateTic.getMonthValue() < 10 ? "0" + startDateTic.getMonthValue() : startDateTic.getMonthValue())
-                .append(startDateTic.getDayOfMonth() < 10 ? "0" + startDateTic.getDayOfMonth() : startDateTic.getDayOfMonth())
-                .append(startDateTic.getHour() < 10 ? "0" + startDateTic.getHour() : startDateTic.getHour());
-
+        // Генерация dateTimeCode для startDateTic
+        int startDateTimeCode = generateDateTimeCode(startDateTic);
         StatisticData lastStatisticData = statisticsRepository
-                .findByDateTimeCode(Integer.parseInt(String.valueOf(dateTimeCode)));
+                .findByDateTimeCode(startDateTimeCode);
 
         statisticData.setIncrease(
                 lastStatisticData != null
@@ -149,7 +138,16 @@ public class StatisticsServiceImpl implements StatisticsService {
         statisticData.setStarting(startDateTic);
         statisticData.setEnding(endDateTic);
         statisticData.setNewest(true);
+
         statisticsRepository.save(statisticData);
     }
+
+    // Новый метод для генерации dateTimeCode
+    private int generateDateTimeCode(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHH");
+        String formattedDate = dateTime.format(formatter);
+        return Integer.parseInt(formattedDate);
+    }
+
 
 }
