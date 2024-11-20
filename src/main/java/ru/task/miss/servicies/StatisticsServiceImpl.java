@@ -91,7 +91,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         // Для вычисления прироста передаем два промежутка времени: текущий и предыдущий час
         LocalDateTime previousStartDate = startDateTic.minusHours(1);  // Предыдущий час
         LocalDateTime previousEndDate = endDateTic.minusHours(1);  // Предыдущий час
-         return salesRepository.getStatisticData(startDateTic, endDateTic);
+         return salesRepository.getStatisticData(endDateTic);
     }
 
 
