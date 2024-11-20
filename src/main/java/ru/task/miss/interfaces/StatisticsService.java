@@ -21,5 +21,5 @@ public interface StatisticsService {
 
     SalesProductStatDto getStatForProduct(Long vendorCode);
 
-    void statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic);
+    StatisticDataDto statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic);
 }

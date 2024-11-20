@@ -87,60 +87,15 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 
     @Override
-    public void statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic) {
-        Collection<Sale> sales = salesRepository.getSales(startDateTic, endDateTic);
+    public StatisticDataDto statCalc(LocalDateTime endDateTic, LocalDateTime startDateTic) {
+        // Для вычисления прироста передаем два промежутка времени: текущий и предыдущий час
+        LocalDateTime previousStartDate = startDateTic.minusHours(1);  // Предыдущий час
+        LocalDateTime previousEndDate = endDateTic.minusHours(1);  // Предыдущий час
+        StatisticDataDto statisticDataDto = salesRepository.getStatisticData(startDateTic, endDateTic, previousStartDate, previousEndDate);
 
-        // Используем новый метод для генерации dateTimeCode для endDateTic
-        int dTc = generateDateTimeCode(endDateTic);
-        StatisticData temp = statisticsRepository.findByDateTimeCode(dTc);
-        StatisticData statisticData = new StatisticData();
-
-        if (temp != null) {
-            statisticData = temp;
-        } else {
-            statisticData.setDateTimeCode(dTc);
-        }
-
-        statisticData.setCountReceipts((long) sales.size());
-
-        Long sumWithoutDiscounts = 0L;
-        Long discountSum = 0L;
-        Long sumWithDiscount = 0L;
-
-        for (Sale sale : sales) {
-            sumWithoutDiscounts += sale.getPrice();
-            discountSum += sale.getDiscountSum();
-            sumWithDiscount += sale.getFinalPrice();
-        }
-
-        statisticData.setSumWithoutDiscounts(sumWithoutDiscounts);
-        statisticData.setAvgSumWithoutDiscounts(
-                statisticData.getCountReceipts() == 0
-                        ? 0
-                        : sumWithoutDiscounts / statisticData.getCountReceipts());
-        statisticData.setDiscountSum(discountSum);
-        statisticData.setSumWithDiscount(sumWithDiscount);
-        statisticData.setAvgSumWithDiscount(
-                (statisticData.getCountReceipts() == 0
-                        ? 0
-                        : sumWithDiscount / statisticData.getCountReceipts()));
-
-        // Генерация dateTimeCode для startDateTic
-        int startDateTimeCode = generateDateTimeCode(startDateTic);
-        StatisticData lastStatisticData = statisticsRepository
-                .findByDateTimeCode(startDateTimeCode);
-
-        statisticData.setIncrease(
-                lastStatisticData != null
-                        ? statisticData.getAvgSumWithDiscount() - lastStatisticData.getAvgSumWithDiscount()
-                        : statisticData.getAvgSumWithDiscount());
-
-        statisticData.setStarting(startDateTic);
-        statisticData.setEnding(endDateTic);
-        statisticData.setNewest(true);
-
-        statisticsRepository.save(statisticData);
+        return statisticDataDto;
     }
+
 
     // Новый метод для генерации dateTimeCode
     private int generateDateTimeCode(LocalDateTime dateTime) {
